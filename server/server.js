@@ -1,18 +1,29 @@
 const express = require('express')
+const Router = require('./routes.js')
+const { isConnected, connected } = require('./db.js'); 
+const cors=require('cors')
 const app = express()
-const dotenv = require('dotenv');
 const port = process.env.PORT||3000
+const dotenv = require('dotenv');
 
-dotenv.config();
+app.use(cors());
+app.use(express.json())
+
 
 app.get('/', (req, res) => {
-    try{
-        res.send('Hello World!')
-    }catch(err){
-        res.send(err)
+     try {
+        res.json({
+            database: isConnected() ? 'connected' : 'disconnected'
+        });
+    } catch (err) {
+        console.log(err);
     }
-})
+});
+app.use(Router); 
 
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
-})
+if (require.main === module) {
+    connected()
+    app.listen(port, async () => {
+        console.log(`🚀 server running on PORT: ${port}`);
+    });
+}
