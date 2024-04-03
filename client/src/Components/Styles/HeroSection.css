@@ -1,0 +1,30 @@
+.hero-section {
+    text-align: center;
+    padding: 100px 0;
+}
+
+.hero-heading {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.hero-subheading {
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+.get-started-btn {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: #333;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+.get-started-btn:hover {
+    background-color: #888;
+}
