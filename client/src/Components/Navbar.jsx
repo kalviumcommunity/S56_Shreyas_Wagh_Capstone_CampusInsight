@@ -6,7 +6,7 @@ function Navbar() {
     <header className="navbar">
       <a className="navbar-logo" href="#">
         <MountainIcon />
-        <span className="sr-only">AnonymS</span>
+        <span className="visually-hidden">AnonymS</span>
       </a>
       <nav className="navbar-nav">
         <a href="#">Home</a>

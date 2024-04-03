@@ -6,7 +6,7 @@ function HeroSection() {
     <div className="hero-section">
       <h1 className="hero-heading">Anonymously Share College Experiences and Reviews</h1>
       <p className="hero-subheading">Join our community to access genuine college insights, engage in discussions, and make informed decisions.</p>
-      <a href="#" className="get-started-btn">Get Started</a>
+      <a href="#" className="get-started-btn">Join Now</a>
     </div>
   );
 }
