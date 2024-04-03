@@ -1,0 +1,61 @@
+:root {
+    --background-color: #111827;
+    --text-color: #ddd;
+    --border-color: #ddd;
+    --box-background-color: #ffffff;
+    --box-text-color: #333;
+    --box-width: 150px;
+    --box-height: 40px;
+    --box-border-radius: 5px;
+    --font-size: 14px;
+    --container-padding: 20px;
+    --container-margin-top: 50px;
+    --container-height: 300px;
+    --container-border-top-color: #ddd;
+    --container-gap: 10px;
+}
+
+.container {
+    background-color: var(--background-color);
+    padding: var(--container-padding);
+    border-top: 1px solid var(--container-border-top-color);
+    box-sizing: border-box;
+    margin-top: var(--container-margin-top);
+    height: var(--container-height);
+}
+
+.titleContainer {
+    text-align: center;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--text-color);
+    margin-bottom: 30px;
+}
+
+.boxContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--container-gap);
+}
+
+.row {
+    display: flex;
+    gap: var(--container-gap);
+}
+
+.box {
+    width: var(--box-width);
+    height: var(--box-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--box-background-color);
+    border: 1px solid var(--box-border-color);
+    border-radius: var(--box-border-radius);
+    font-size: var(--font-size);
+    color: var(--box-text-color);
+}

@@ -1,0 +1,46 @@
+:root {
+    --hero-section-padding-top: 100px;
+    --hero-section-padding-bottom: 0;
+    --hero-heading-font-size: 36px;
+    --hero-heading-font-weight: bold;
+    --hero-heading-margin-bottom: 20px;
+    --hero-subheading-font-size: 18px;
+    --hero-subheading-margin-bottom: 40px;
+    --get-started-btn-padding: 15px 30px;
+    --get-started-btn-background-color: #333;
+    --get-started-btn-color: #fff;
+    --get-started-btn-border-radius: 8px;
+    --get-started-btn-font-size: 18px;
+    --get-started-btn-hover-background-color: #888;
+}
+
+.hero-section {
+    text-align: center;
+    padding: var(--hero-section-padding-top) 0 var(--hero-section-padding-bottom);
+}
+
+.hero-heading {
+    font-size: var(--hero-heading-font-size);
+    font-weight: var(--hero-heading-font-weight);
+    margin-bottom: var(--hero-heading-margin-bottom);
+}
+
+.hero-subheading {
+    font-size: var(--hero-subheading-font-size);
+    margin-bottom: var(--hero-subheading-margin-bottom);
+}
+
+.get-started-btn {
+    display: inline-block;
+    padding: var(--get-started-btn-padding);
+    background-color: var(--get-started-btn-background-color);
+    color: var(--get-started-btn-color);
+    text-decoration: none;
+    border-radius: var(--get-started-btn-border-radius);
+    font-size: var(--get-started-btn-font-size);
+    transition: background-color 0.3s ease;
+}
+
+.get-started-btn:hover {
+    background-color: var(--get-started-btn-hover-background-color);
+}
