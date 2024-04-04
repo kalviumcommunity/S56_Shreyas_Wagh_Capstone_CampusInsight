@@ -1,0 +1,72 @@
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+#LoginPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    color: #333;
+}
+
+.label-input-container {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.label-input-container label {
+    margin-bottom: 5px;
+}
+
+.label-input-container input {
+    width: 90%;
+    padding: 10px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    width: 1000px;
+}
+
+.login {
+    background-color: #333;
+    color: #ddd;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.login:hover {
+    background-color: #555;
+}
+
+.agreement-text {
+    color: #888;
+}
+
+.agreement-text u {
+    text-decoration: underline;
+}
+
+.left-align1 {
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.left-align2 {
+    font-size: 20px;
+    color: #888;
+}

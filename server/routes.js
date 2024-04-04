@@ -21,14 +21,14 @@ router.get('/getUsers', async (req, res) => {
 
 router.post('/SignUp', async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const {firstName,lastName, email, password } = req.body;
         const existingUser = await Details.findOne({ email });
 
         if (existingUser) {
             return res.status(400).json({ message: 'Email already exists' });
         }
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new Details({ email, password: hashedPassword });
+        const newUser = new Details({firstName,lastName, email, password: hashedPassword });
         await newUser.save();
         res.status(201).json({ message: 'User signed up successfully' });
     } catch (error) {

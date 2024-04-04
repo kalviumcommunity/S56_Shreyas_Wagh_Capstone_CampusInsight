@@ -1,39 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Styles/Navbar.css';
-
+import MountainIcon from './MountainIcon';
+import { Link, useNavigate } from 'react-router-dom';
 function Navbar() {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   return (
     <header className="navbar">
-      <a className="navbar-logo" href="#">
+      <div className="navbar-logo">
         <MountainIcon />
         <span className="visually-hidden">AnonymS</span>
-      </a>
+      </div>
       <nav className="navbar-nav">
-        <a href="#">Home</a>
-        <a href="#">About</a>
-        <a href="#">Features</a>
-        <a href="#">blog</a>
-        <a href="#">Contact</a>
+        <span>Home</span>
+        <span>About</span>
+        <span>Features</span>
+        <span>Blog</span>
+        <span>Contact</span>
       </nav>
-      <div>
-        <a className="navbar-button" href="#">
-          Get Started
-        </a>
+      <div className="navbar-dropdown">
+        <div className="navbar-button-container">
+          <button className="navbar-button" onClick={toggleDropdown}>
+            Get Started
+          </button>
+          {isDropdownOpen && (
+            <div className="dropdown-content">
+              <Link to={"/login"}><span className="navbar-login">Login</span></Link>
+               <Link to={"/signup"}><span className="navbar-signup">Signup</span></Link>
+            </div>
+          )}
+        </div>
       </div>
     </header>
-  );
-}
-
-function MountainIcon(props) {
-  return (
-    <svg
-      width="24"
-      height="24"
-      fill=""
-      stroke="currentColor"
-    >
-      <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
-    </svg>
   );
 }
 
