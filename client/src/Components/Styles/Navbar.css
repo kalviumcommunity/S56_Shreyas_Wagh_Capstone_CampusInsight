@@ -46,7 +46,14 @@ span {
     color: var(--navbar-link-hover-color);
 }
 
-.navbar-button {
+.navbar-button-container {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.navbar-button,
+.navbar-login,
+.navbar-signup {
     padding: 10px 20px;
     background-color: var(--navbar-button-background-color);
     color: var(--navbar-button-color);
@@ -56,6 +63,32 @@ span {
     text-decoration: double;
 }
 
-.navbar-button:hover {
+.navbar-button:hover,
+.navbar-login:hover,
+.navbar-signup:hover {
     background-color: var(--navbar-button-hover-background-color);
+}
+
+.dropdown-content {
+    position: absolute;
+    top: calc(100% + 11px);
+    left: 0;
+    background-color: #fff;
+    border: 1px solid var(--navbar-border-color);
+    border-radius: 5px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-weight: 20;
+
+}
+.navbar-login {
+    text-decoration: underline;
+    color: white;
+    
+}
+.navbar-signup {
+    text-decoration: underline;
+    color: white;
 }

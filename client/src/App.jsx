@@ -1,22 +1,21 @@
 import { useState } from 'react'
-import Navbar from './Components/Navbar'
-import Footer from './Components/Footer'
-import Landing from './Components/Landing'
-import HeroSection from './Components/HeroSection'
-
-
+import SignUpPage from './Pages/SignUpPage'
+import LoginPage from './Pages/LoginPage'
+import LandingPage from './Pages/LandingPage'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-
-     <Navbar />
-     <HeroSection />
-     <Landing />
-     <Footer />
-     
+      <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+      </Routes>
+    </Router>
     </>
   )
 }
