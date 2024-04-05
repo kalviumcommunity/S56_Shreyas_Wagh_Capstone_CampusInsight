@@ -1,15 +1,30 @@
 import React, { useState } from 'react';
-import './Styles/LogInPage.css';
+import './Styles/LogInPage.css'; 
 import MountainIcon from '../Components/MountainIcon';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import cookie from 'js-cookie';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', { email, password });
+    try {
+      const response = await axios.post(
+        'https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/login',
+        { email, password }
+      );
+      const token = response.data.token;
+      cookie.set('userToken', token);
+      cookie.set('userEmail', email);
+      console.log('Login successful. Token:', token);
+    } catch (error) {
+      setError(error.response.data.message);
+      console.error('Error logging in:', error.response.data.message);
+    }
   };
 
   return (
@@ -47,6 +62,8 @@ const LoginPage = () => {
 
       <p className="left-align1">Join the Conversation</p>
       <p className="left-align2">Sign up to connect with friends, share photos, and be inspired.</p>
+
+      {error && <p className="error-message">{error}</p>}
 
       <p>Don't have an account? <Link to={"/signup"}>Sign Up</Link></p>
     </div>

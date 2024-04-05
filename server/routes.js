@@ -30,6 +30,8 @@ router.post('/SignUp', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new Details({firstName,lastName, email, password: hashedPassword });
         await newUser.save();
+         const token = jwt.sign({ email: newUser.email }, 'JWT_SECRET'); 
+        res.status(201).json({ message: 'User signed up successfully', token });
         res.status(201).json({ message: 'User signed up successfully' });
     } catch (error) {
         console.error(error);
@@ -58,6 +60,7 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
 
 router.post('/username', async (req, res) => {
     try {
