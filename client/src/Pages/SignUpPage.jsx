@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import './Styles/SignupPage.css';
 import MountainIcon from '../Components/MountainIcon';
 import { Link } from 'react-router-dom';
-import axios from 'axios'; // Import Axios
+import axios from 'axios'; 
+import cookie from 'js-cookie';
 
 const SignUpPage = () => {
   const [firstName, setFirstName] = useState('');
@@ -18,9 +19,12 @@ const SignUpPage = () => {
       email: email,
       password: password
     };
-    axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/SignUp', formData)
+    axios.post(
+      'https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/SignUp', formData)
       .then(response => {
         console.log('Response from server:', response.data);
+        cookie.set('userToken', response.data.token);
+        cookie.set('userEmail', email); 
         setFirstName('');
         setLastName('');
         setEmail('');

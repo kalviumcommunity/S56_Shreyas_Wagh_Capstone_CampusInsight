@@ -3,6 +3,7 @@ import './Styles/LogInPage.css';
 import MountainIcon from '../Components/MountainIcon';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import cookie from 'js-cookie';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -17,6 +18,8 @@ const LoginPage = () => {
         { email, password }
       );
       const token = response.data.token;
+      cookie.set('userToken', token);
+      cookie.set('userEmail', email);
       console.log('Login successful. Token:', token);
     } catch (error) {
       setError(error.response.data.message);

@@ -30,6 +30,8 @@ router.post('/SignUp', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new Details({firstName,lastName, email, password: hashedPassword });
         await newUser.save();
+         const token = jwt.sign({ email: newUser.email }, 'JWT_SECRET'); 
+        res.status(201).json({ message: 'User signed up successfully', token });
         res.status(201).json({ message: 'User signed up successfully' });
     } catch (error) {
         console.error(error);
@@ -59,34 +61,6 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.post("/Login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(401).json({ error: "User not found" });
-    }
-
-    if (!(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ error: "Password doesn't match" });
-    }
-
-    const token = jwt.sign({ _id: user._id }, process.env.Access_Token, {
-      expiresIn: "100d",
-    });
-
-    res.status(200).json({
-      status: "success",
-      message: "Login successful",
-      token,
-      email: user.email,
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
 
 router.post('/username', async (req, res) => {
     try {
