@@ -55,7 +55,7 @@ const LoginPage = () => {
             required
           />
         </div>
-        <button type="submit" className='login'>Log In</button>
+        <Link to={"/home"}><button type="submit" className='login'>Log In</button></Link>
       </form>
     
       <p className="agreement-text">By clicking Log In, you agree to our <u>Terms of Service</u> and <u>Privacy Policy</u></p>
