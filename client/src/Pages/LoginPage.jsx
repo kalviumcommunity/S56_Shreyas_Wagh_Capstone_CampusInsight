@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Styles/LogInPage.css'; 
 import MountainIcon from '../Components/MountainIcon';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import cookie from 'js-cookie';
 
@@ -9,6 +9,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,10 +22,14 @@ const LoginPage = () => {
       cookie.set('userToken', token);
       cookie.set('userEmail', email);
       console.log('Login successful. Token:', token);
+      navigate('/home');
     } catch (error) {
       setError(error.response.data.message);
       console.error('Error logging in:', error.response.data.message);
     }
+  };
+  const handleSignUpClick = () => {
+    navigate('/signup'); 
   };
 
   return (
@@ -65,7 +70,7 @@ const LoginPage = () => {
 
       {error && <p className="error-message">{error}</p>}
 
-      <p>Don't have an account? <Link to={"/signup"}>Sign Up</Link></p>
+      <p>Don't have an account? <span onClick={handleSignUpClick} style={{ cursor: 'pointer', textDecoration: 'underline' }}>Sign Up</span></p>
     </div>
   );
 };

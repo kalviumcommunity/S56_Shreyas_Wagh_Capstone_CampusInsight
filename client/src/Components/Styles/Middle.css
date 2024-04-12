@@ -1,0 +1,81 @@
+.message-feed {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.message-feed header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.message-feed header img {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.message-feed nav ul {
+    display: flex;
+    list-style: none;
+    margin-left: auto;
+}
+
+.message-feed nav ul li {
+    margin-right: 20px;
+}
+
+.message-feed nav ul li a {
+    text-decoration: none;
+    color: #1DA1F2;
+}
+
+.message-feed .feed {
+    border-top: 1px solid #e1e8ed;
+}
+
+.message-feed .message {
+    display: flex;
+    padding: 15px 0;
+    border-bottom: 1px solid #e1e8ed;
+}
+
+.message-feed .message img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.message-feed .user-info {
+    margin-bottom: 5px;
+}
+
+.message-feed .user-info span {
+    margin-right: 10px;
+}
+
+.message-feed .user-info .display-name {
+    font-weight: bold;
+}
+
+.message-feed .timestamp {
+    color: #657786;
+}
+
+.message-feed .actions button {
+    margin-right: 10px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 20px;
+    background-color: #e1e8ed;
+    color: #657786;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.message-feed .actions button:hover {
+    background-color: #ccd6dd;
+}
