@@ -6,11 +6,11 @@ import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
 
-  const handleLogout = () => {
   const navigate = useNavigate(); 
+  const handleLogout = () => {
     cookie.remove('userToken');
     cookie.remove('userEmail');
-    navigate('/LandingPage');
+    navigate('/');
   };
 
 
