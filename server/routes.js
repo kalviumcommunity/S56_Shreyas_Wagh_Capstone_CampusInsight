@@ -12,7 +12,7 @@ router.use(bodyParser.json());
 router.get('/getUsers', async (req, res) => {
     try {
         let result = await Details.find({});
-        res.json(result);
+        res.json(result);   
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
@@ -32,12 +32,35 @@ router.post('/SignUp', async (req, res) => {
         await newUser.save();
          const token = jwt.sign({ email: newUser.email }, 'JWT_SECRET'); 
         res.status(201).json({ message: 'User signed up successfully', token });
-        res.status(201).json({ message: 'User signed up successfully' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
+router.post('/SignUp/Username', async (req, res) => {
+    try {
+        const { email, username } = req.body;
+        const user = await Details.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const existingUserWithUsername = await Details.findOne({ username });
+        if (existingUserWithUsername) {
+            return res.status(400).json({ message: 'Username already exists' });
+        }
+
+        user.username = username;
+        await user.save();
+        res.status(200).json({ message: 'Username added successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 
 
 router.post('/login', async (req, res) => {
