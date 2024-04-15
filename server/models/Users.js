@@ -4,8 +4,9 @@ const UserDetails = new mongoose.Schema({
     firstName:String,
     lastName:String,
     email:String,
-    password:String
-});
+    password:String,
+    username:String
+},{ versionKey: false });
 const Details=mongoose.model("user",UserDetails);
 
 const username=new mongoose.Schema({

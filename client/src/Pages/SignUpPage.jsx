@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import './Styles/SignupPage.css';
 import MountainIcon from '../Components/MountainIcon';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import axios from 'axios'; 
 import cookie from 'js-cookie';
 
 const SignUpPage = () => {
+  const navigate = useNavigate(); // Initialize useNavigate hook
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -29,6 +30,7 @@ const SignUpPage = () => {
         setLastName('');
         setEmail('');
         setPassword('');
+        navigate('/Username'); 
       })
       .catch(error => {
         console.error('Error submitting form:', error);
@@ -81,7 +83,7 @@ const SignUpPage = () => {
             required
           />
         </div>
-        <button type="submit" className='signUp'>Sign Up</button>
+        <button type="submit" className='signUp'><span onClick={()=>navigate('/username')}>Sign Up</span></button>
       </form>
       <p className="agreement-text">By clicking Sign Up, you agree to our <u>Terms of Service</u> and <u>Privacy Policy</u></p>
       <p className="left-align1">Join the Conversation</p>
@@ -91,7 +93,7 @@ const SignUpPage = () => {
         <button>Sign up with Facebook</button>
         <button>Sign up with Apple</button>
       </div>
-      <p>Already have an account? <Link to={"/login"}>Login</Link></p>
+       <p>Already have an account? <span onClick={() => navigate('/login')}>Login</span></p>
     </div>
   );
 };

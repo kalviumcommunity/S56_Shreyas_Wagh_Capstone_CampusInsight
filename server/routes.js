@@ -39,6 +39,23 @@ router.post('/SignUp', async (req, res) => {
     }
 });
 
+router.post('/SignUp/Username', async (req, res) => {
+    try {
+        const { email, username } = req.body;
+        const user = await Details.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        user.username = username;
+        await user.save();
+        res.status(200).json({ message: 'Username added successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 
 router.post('/login', async (req, res) => {
     try {
