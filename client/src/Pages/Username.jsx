@@ -3,24 +3,44 @@ import MountainIcon from '../Components/MountainIcon';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Styles/Username.css';
+
 const Username = () => {
   const navigate = useNavigate(); 
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
-
+  const [usernameError, setUsernameError] = useState('');
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = {
-      email: email,
-      username: username
-    };
-    try {
-      const response = await axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/SignUp/Username', formData);
-      console.log('Response from server:', response.data);
-      navigate('/home');
-    } catch (error) {
-      console.error('Error submitting form:', error);
+    if (validateUsername(username)) {
+      const formData = {
+        email: email,
+        username: username
+      };
+      try {
+        const response = await axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/SignUp/Username', formData);
+        console.log('Response from server:', response.data);
+        navigate('/home');
+      } catch (error) {
+        console.error('Error submitting form:', error);
+      }
     }
+  };
+
+  const validateUsername = (username) => {
+    const minLength = 3;
+    const validCharacters = /^[a-zA-Z0-9_]+$/; 
+    
+    if (username.length < minLength) {
+      setUsernameError(`Username must be at least ${minLength} characters long`);
+      return false;
+    }
+    if (!username.match(validCharacters)) {
+      setUsernameError('Username can only contain letters, numbers, and underscores');
+      return false;
+    }
+    setUsernameError('');
+    return true;
   };
 
   return (
@@ -48,6 +68,7 @@ const Username = () => {
             placeholder="Choose your username"
             required
           />
+          {usernameError && <p className="error">{usernameError}</p>}
         </div>
         <button type="submit" className='submitUsername'>Submit</button>
       </form>

@@ -5,7 +5,7 @@ const UserDetails = new mongoose.Schema({
     lastName:String,
     email:String,
     password:String,
-    username:String
+    username: { type: String, unique: true }
 },{ versionKey: false });
 const Details=mongoose.model("user",UserDetails);
 

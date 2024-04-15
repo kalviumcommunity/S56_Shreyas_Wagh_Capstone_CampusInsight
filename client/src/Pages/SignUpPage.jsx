@@ -11,30 +11,67 @@ const SignUpPage = () => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = {
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      password: password
-    };
-    axios.post(
-      'https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/SignUp', formData)
-      .then(response => {
-        console.log('Response from server:', response.data);
-        cookie.set('userToken', response.data.token);
-        cookie.set('userEmail', email); 
-        setFirstName('');
-        setLastName('');
-        setEmail('');
-        setPassword('');
-        navigate('/Username'); 
-      })
-      .catch(error => {
-        console.error('Error submitting form:', error);
-      });
+    if (validateForm()) {
+      const formData = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password
+      };
+      axios.post(
+        'https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/SignUp', formData)
+        .then(response => {
+          console.log('Response from server:', response.data);
+          cookie.set('userToken', response.data.token);
+          cookie.set('userEmail', email); 
+          setFirstName('');
+          setLastName('');
+          setEmail('');
+          setPassword('');
+          navigate('/Username'); 
+        })
+        .catch(error => {
+          console.error('Error submitting form:', error);
+        });
+    }
+  };
+
+  const validateForm = () => {
+    let errors = {};
+    let isValid = true;
+
+    if (!firstName) {
+      errors.firstName = 'First name is required';
+      isValid = false;
+    }
+
+    if (!lastName) {
+      errors.lastName = 'Last name is required';
+      isValid = false;
+    }
+
+    if (!email) {
+      errors.email = 'Email is required';
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      errors.email = 'Email is invalid';
+      isValid = false;
+    }
+
+    if (!password) {
+      errors.password = 'Password is required';
+      isValid = false;
+    } else if (password.length < 6) {
+      errors.password = 'Password must be at least 6 characters long';
+      isValid = false;
+    }
+
+    setErrors(errors);
+    return isValid;
   };
 
   return (
@@ -52,6 +89,7 @@ const SignUpPage = () => {
             placeholder="Enter your first name"
             required
           />
+          {errors.firstName && <p className="error">{errors.firstName}</p>}
         </div>
         <div className="label-input-container">
           <label>Last name</label>
@@ -62,6 +100,7 @@ const SignUpPage = () => {
             placeholder="Enter your last name"
             required
           />
+          {errors.lastName && <p className="error">{errors.lastName}</p>}
         </div>
         <div className="label-input-container">
           <label>Email</label>
@@ -72,6 +111,7 @@ const SignUpPage = () => {
             placeholder="Enter your email"
             required
           />
+          {errors.email && <p className="error">{errors.email}</p>}
         </div>
         <div className="label-input-container">
           <label>Password</label>
@@ -82,8 +122,9 @@ const SignUpPage = () => {
             placeholder="Enter your password"
             required
           />
+          {errors.password && <p className="error">{errors.password}</p>}
         </div>
-        <button type="submit" className='signUp'><span onClick={()=>navigate('/username')}>Sign Up</span></button>
+        <button type="submit" className='signUp'> Sign Up</button>
       </form>
       <p className="agreement-text">By clicking Sign Up, you agree to our <u>Terms of Service</u> and <u>Privacy Policy</u></p>
       <p className="left-align1">Join the Conversation</p>
