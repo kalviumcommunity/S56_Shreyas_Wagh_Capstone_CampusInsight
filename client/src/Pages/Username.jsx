@@ -1,26 +1,26 @@
 import React, { useState } from 'react';
 import MountainIcon from '../Components/MountainIcon';
-import { Link } from 'react-router-dom';
-import axios from 'axios'; 
-
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import './Styles/Username.css';
 const Username = () => {
+  const navigate = useNavigate(); 
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
       email: email,
       username: username
     };
-    axios.post(
-      'http://localhost:3000/SignUp/Username', formData) 
-      .then(response => {
-        console.log('Response from server:', response.data);
-      })
-      .catch(error => {
-        console.error('Error submitting form:', error);
-      });
+    try {
+      const response = await axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/SignUp/Username', formData);
+      console.log('Response from server:', response.data);
+      navigate('/home');
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
 
   return (
@@ -49,9 +49,8 @@ const Username = () => {
             required
           />
         </div>
-        <button type="submit" className='submitUsername'><span onClick={()=>navigate('/home')}>Submit</span></button>
+        <button type="submit" className='submitUsername'>Submit</button>
       </form>
-       <p>Already have an account? <span onClick={() => navigate('/login')}>Login</span></p>
     </div>
   );
 };
