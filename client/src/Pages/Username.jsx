@@ -3,6 +3,7 @@ import MountainIcon from '../Components/MountainIcon';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Styles/Username.css';
+import cookie from 'js-cookie';
 
 const Username = () => {
   const navigate = useNavigate(); 
@@ -20,6 +21,7 @@ const Username = () => {
       try {
         const response = await axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/SignUp/Username', formData);
         console.log('Response from server:', response.data);
+        cookie.set('username', username);
         navigate('/home');
       } catch (error) {
         console.error('Error submitting form:', error);

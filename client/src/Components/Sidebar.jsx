@@ -12,7 +12,6 @@ const Sidebar = () => {
   const [username, setUsername] = useState('');
 
  useEffect(() => {
-    const userEmail = cookie.get('userEmail');
     const username = cookie.get('username');
     setUsername(username);
   }, []);
@@ -21,6 +20,7 @@ const Sidebar = () => {
   const handleLogout = () => {
     cookie.remove('userToken');
     cookie.remove('userEmail');
+    cookie.remove('username');
     navigate('/');
   };
 

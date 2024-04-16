@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { Details } = require("./models/Users.js");
-const { Username } = require("./models/Users.js");
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
@@ -62,8 +61,6 @@ router.post('/SignUp/Username', async (req, res) => {
     }
 });
 
-
-
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -84,51 +81,5 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
-
-
-router.post('/username', async (req, res) => {
-    try {
-        const { username } = req.body;
-        const existingUsername = await Username.findOne({ username });
-        if (existingUsername) {
-            return res.status(400).json({ message: 'Username already exists' });
-        }
-        const newUsername = new Username({ username });
-        await newUsername.save();
-        res.status(201).json({ message: 'Username added successfully' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
-
-router.get('/getUsername', async (req, res) => {
-    try {
-        let result = await Username.find({});
-        res.json(result);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
-
-router.get('/getUserUsername', async (req, res) => {
-    try {
-        const userEmail = req.cookies.userEmail; 
-        const user = await Details.findOne({ email: userEmail });
-
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        res.json({ username: user.username });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
-
-
-
 
 module.exports = router;
