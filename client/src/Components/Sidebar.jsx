@@ -12,20 +12,9 @@ const Sidebar = () => {
   const [username, setUsername] = useState('');
 
  useEffect(() => {
-    const fetchUsername = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/getUserUsername', {
-          headers: {
-            Authorization: `Bearer ${cookie.get('userToken')}`, 
-          },
-        });
-        setUsername(response.data.username);
-      } catch (error) {
-        console.error('Error fetching username:', error);
-      }
-    };
-
-    fetchUsername();
+    const userEmail = cookie.get('userEmail');
+    const username = cookie.get('username');
+    setUsername(username);
   }, []);
 
 

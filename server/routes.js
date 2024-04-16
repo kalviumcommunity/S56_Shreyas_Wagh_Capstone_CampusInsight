@@ -54,6 +54,7 @@ router.post('/SignUp/Username', async (req, res) => {
 
         user.username = username;
         await user.save();
+        res.cookie('username', username, { httpOnly: true });
         res.status(200).json({ message: 'Username added successfully' });
     } catch (error) {
         console.error(error);
