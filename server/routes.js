@@ -111,5 +111,23 @@ router.get('/getUsername', async (req, res) => {
     }
 });
 
+router.get('/getUserUsername', async (req, res) => {
+    try {
+        const userEmail = req.cookies.userEmail; 
+        const user = await Details.findOne({ email: userEmail });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json({ username: user.username });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
+
 
 module.exports = router;
