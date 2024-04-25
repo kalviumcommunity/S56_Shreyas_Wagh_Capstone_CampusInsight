@@ -5,33 +5,6 @@
     font-family: Arial, sans-serif;
 }
 
-.message-feed header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.message-feed header img {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-}
-
-.message-feed nav ul {
-    display: flex;
-    list-style: none;
-    margin-left: auto;
-}
-
-.message-feed nav ul li {
-    margin-right: 20px;
-}
-
-.message-feed nav ul li a {
-    text-decoration: none;
-    color: #1DA1F2;
-}
-
 .message-feed .feed {
     border-top: 1px solid #e1e8ed;
 }
