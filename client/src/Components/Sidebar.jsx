@@ -1,4 +1,3 @@
-// Sidebar.js
 import React from 'react';
 import './Styles/Sidebar.css';
 import MountainIcon from '../Components/MountainIcon';
