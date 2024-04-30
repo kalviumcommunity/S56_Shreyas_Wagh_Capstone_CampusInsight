@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Details } = require("./models/Users.js");
+const { message } = require("./models/Messages.js");
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
@@ -80,6 +81,38 @@ router.post('/login', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+router.get('/getMessages', async (req, res) => {
+    try {
+        let result = await message.find({});
+        res.json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+router.post('/postMessage', async (req, res) => {
+    try {
+        const { message: messageContent, username } = req.body; 
+        if (!messageContent || messageContent.trim() === '') {
+            return res.status(400).json({ success: false, error: 'Message content is required' });
+        }
+        if (!username || username.trim() === '') {
+            return res.status(400).json({ success: false, error: 'Username is required' });
+        }
+        const newMessage = new message({
+            message: messageContent,
+            username: username 
+        });
+        await newMessage.save();
+
+        res.status(201).json({ success: true, message: 'Message posted successfully' });
+    } catch (error) {
+        console.error('Error posting message:', error);
+        res.status(500).json({ success: false, error: 'Failed to post message' });
     }
 });
 
