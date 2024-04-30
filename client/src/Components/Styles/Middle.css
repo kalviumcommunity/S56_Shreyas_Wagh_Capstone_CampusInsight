@@ -1,3 +1,5 @@
+/* Middle.css */
+
 .message-feed {
     max-width: 600px;
     margin: 0 auto;
@@ -10,16 +12,8 @@
 }
 
 .message-feed .message {
-    display: flex;
     padding: 15px 0;
     border-bottom: 1px solid #e1e8ed;
-}
-
-.message-feed .message img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 10px;
 }
 
 .message-feed .user-info {
@@ -30,12 +24,26 @@
     margin-right: 10px;
 }
 
-.message-feed .user-info .display-name {
+.message-feed .username {
     font-weight: bold;
+    display: block;
+    /* Ensure the username is displayed on a separate line */
 }
 
-.message-feed .timestamp {
+.message-feed .content {
+    margin-bottom: 10px;
+    /* Add some space below the message content */
+}
+
+.message-feed .metadata {
     color: #657786;
+    /* Set the color for timestamp and likes */
+    font-size: 14px;
+    /* Adjust font size for timestamp and likes */
+}
+
+.message-feed .metadata span {
+    margin-right: 10px;
 }
 
 .message-feed .actions button {
