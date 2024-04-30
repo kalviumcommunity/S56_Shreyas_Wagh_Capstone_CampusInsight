@@ -97,11 +97,16 @@ router.get('/getMessages', async (req, res) => {
 router.post('/postMessage', async (req, res) => {
     try {
         const { message: messageContent, username } = req.body; 
+        if (!messageContent || messageContent.trim() === '') {
+            return res.status(400).json({ success: false, error: 'Message content is required' });
+        }
+        if (!username || username.trim() === '') {
+            return res.status(400).json({ success: false, error: 'Username is required' });
+        }
         const newMessage = new message({
             message: messageContent,
             username: username 
         });
-
         await newMessage.save();
 
         res.status(201).json({ success: true, message: 'Message posted successfully' });

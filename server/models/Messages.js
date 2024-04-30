@@ -15,13 +15,12 @@ const messageSchema = new mongoose.Schema({
   },
   username: {
     type: String,
-    required: true
+    required: true,
+    index: true // Adding an index on the username field
   }
 },{ versionKey: false });
 
-
-const message=mongoose.model("message",messageSchema);
-
+const message = mongoose.model("message", messageSchema);
 
 module.exports = {
     message
