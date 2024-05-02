@@ -11,3 +11,6 @@ CampusInsight is an online platform aimed at facilitating anonymous posting for 
 - **Search and Filtering**: Users can search for colleges and posts based on various criteria such as location, program, or specific topics.
 - **Email Domain Verification**: During the registration process, users are required to verify their email domain to ensure that they are actually studying in the specific college they claim.
 
+# Deployed Frontend
+
+Deployed link:- https://client-shreyas2004wagh-shreyas2004waghs-projects.vercel.app/
