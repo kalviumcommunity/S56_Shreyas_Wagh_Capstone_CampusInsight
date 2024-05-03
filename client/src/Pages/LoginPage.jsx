@@ -4,7 +4,6 @@ import MountainIcon from '../Components/MountainIcon';
 import { Link,useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import cookie from 'js-cookie';
-
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
