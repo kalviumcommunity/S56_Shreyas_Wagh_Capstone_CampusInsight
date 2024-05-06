@@ -9,5 +9,5 @@ export default defineConfig(({ mode }) => {
       'login_uri': JSON.stringify(env.login_uri)
     },
     plugins: [react()],
-}
-})
+};
+});

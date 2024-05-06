@@ -1,42 +1,51 @@
 import React, { useState } from 'react';
-import './Styles/LogInPage.css'; 
+import './Styles/LogInPage.css';
 import MountainIcon from '../Components/MountainIcon';
-import { Link,useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import cookie from 'js-cookie';
+
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const response = await axios.post(
-      '${login_uri}',
-      { email, password }
-    );
-    if (response && response.data) {
-      const token = response.data.token;
-      cookie.set('userToken', token);
-      cookie.set('userEmail', email);
-      const username = response.data.username;
-      cookie.set('username', username);
-      console.log('Login successful. Token:', token);
-      navigate('/home');
-    } else {
-      setError('Unexpected response format');
-      console.error('Unexpected response format');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        'https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/login',
+        { email, password }
+      );
+      if (response && response.data) {
+        const token = response.data.token;
+        cookie.set('userToken', token);
+        cookie.set('userEmail', email);
+        const username = response.data.username;
+        cookie.set('username', username);
+        console.log('Login successful. Token:', token);
+        navigate('/home');
+      } else {
+        setError('Unexpected response format');
+        console.error('Unexpected response format');
+      }
+    } catch (error) {
+      if (error.response) {
+        setError(error.response.data.message);
+        console.error('API error:', error.response.data.message);
+      } else if (error.request) {
+        setError('Network error. Please try again later.');
+        console.error('Network error:', error.request);
+      } else {
+        setError('An unexpected error occurred. Please try again later.');
+        console.error('Other error:', error.message);
+      }
     }
-  } catch (error) {
-    setError(error.response.data.message);
-    console.error('Error logging in:', error.response.data.message);
-  }
-};
+  };
 
   const handleSignUpClick = () => {
-    navigate('/signup'); 
+    navigate('/signup');
   };
 
   return (
@@ -69,7 +78,7 @@ const handleSubmit = async (e) => {
         </div>
         <button type="submit" className='login'>Log In</button>
       </form>
-    
+
       <p className="agreement-text">By clicking Log In, you agree to our <u>Terms of Service</u> and <u>Privacy Policy</u></p>
 
       <p className="left-align1">Join the Conversation</p>
