@@ -10,23 +10,31 @@ const LoginPage = () => {
   const [error, setError] = useState('');
    const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        'https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/login',
-        { email, password }
-      );
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await axios.post(
+      '${login_uri}',
+      { email, password }
+    );
+    if (response && response.data) {
       const token = response.data.token;
       cookie.set('userToken', token);
       cookie.set('userEmail', email);
+      const username = response.data.username;
+      cookie.set('username', username);
       console.log('Login successful. Token:', token);
       navigate('/home');
-    } catch (error) {
-      setError(error.response.data.message);
-      console.error('Error logging in:', error.response.data.message);
+    } else {
+      setError('Unexpected response format');
+      console.error('Unexpected response format');
     }
-  };
+  } catch (error) {
+    setError(error.response.data.message);
+    console.error('Error logging in:', error.response.data.message);
+  }
+};
+
   const handleSignUpClick = () => {
     navigate('/signup'); 
   };

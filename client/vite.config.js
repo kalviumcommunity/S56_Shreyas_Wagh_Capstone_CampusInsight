@@ -5,7 +5,8 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
     define: {
-      'API_URI': JSON.stringify(env.API_URI)
+      'API_URI': JSON.stringify(env.API_URI),
+      'login_uri': JSON.stringify(env.login_uri)
     },
     plugins: [react()],
 }
