@@ -19,7 +19,7 @@ const Middle = ({ messages }) => {
   const handleLike = async (messageId) => {
     try {
       if (!likedMessages.includes(messageId)) {
-        await axios.post('http://localhost:3000/likeMessage', { messageId });
+        await axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/likeMessage', { messageId });
         setLikedMessages([...likedMessages, messageId]);
         setUpdatedMessages(prevMessages =>
           prevMessages.map(msg =>
@@ -35,7 +35,7 @@ const Middle = ({ messages }) => {
   const handleUnlike = async (messageId) => {
     try {
       if (likedMessages.includes(messageId)) {
-        await axios.post('http://localhost:3000/unlikeMessage', { messageId });
+        await axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/unlikeMessage', { messageId });
         setLikedMessages(likedMessages.filter(id => id !== messageId));
         setUpdatedMessages(prevMessages =>
           prevMessages.map(msg =>
