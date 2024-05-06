@@ -32,6 +32,7 @@ const Sidebar = () => {
         <li className="sidebar-menu-item">
           <span>Home</span>
         </li>
+        <br />
         <li className="sidebar-menu-item">
           <span>Explore</span>
         </li>
@@ -47,15 +48,19 @@ const Sidebar = () => {
         <li className="sidebar-menu-item">
           <span>Lists</span> 
         </li>
+        <br />
         <li className="sidebar-menu-item">
           <span>Profile</span>
         </li>
+        <br />
         <li className="sidebar-menu-item">
           <span>More</span>
         </li>
+        <br />
         <li className="sidebar-menu-item">
           <span>Premium</span>
         </li>
+        <br />
         <li className="sidebar-menu-item">
           <span onClick={handleLogout}>Logout</span>
         </li>

@@ -76,8 +76,13 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Invalid password' });
         }
         const username = user.username;
-         const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.status(200).json({ message: 'Login successful', token, username });
+        jwt.sign({ email: user.email, username }, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
+            if (err) {
+                console.error('Error signing JWT:', err);
+                return res.status(500).json({ message: 'Error generating token' });
+            }
+            res.status(200).json({ message: 'Login successful', token, username });
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
@@ -113,6 +118,40 @@ router.post('/postMessage', async (req, res) => {
     } catch (error) {
         console.error('Error posting message:', error);
         res.status(500).json({ success: false, error: 'Failed to post message' });
+    }
+});
+
+router.post('/likeMessage', async (req, res) => {
+    try {
+        const messageId = req.body.messageId;
+        const msg = await message.findById(messageId);
+        if (!msg) {
+            return res.status(404).json({ message: 'Message not found' });
+        }
+        msg.likes++;
+        await msg.save();
+        res.status(200).json({ message: 'Likes incremented successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+router.post('/unlikeMessage', async (req, res) => {
+    try {
+        const messageId = req.body.messageId;
+        const msg = await message.findById(messageId);
+        if (!msg) {
+            return res.status(404).json({ message: 'Message not found' });
+        }
+        if (msg.likes > 0) {
+            msg.likes--;
+            await msg.save();
+        }
+        res.status(200).json({ message: 'Likes decremented successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 

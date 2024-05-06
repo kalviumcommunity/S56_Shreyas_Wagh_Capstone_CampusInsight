@@ -13,10 +13,10 @@ const messageSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  username: {
+  username: { 
     type: String,
-    required: true,
-    index: true // Adding an index on the username field
+    required: true, 
+    index: true 
   }
 },{ versionKey: false });
 
