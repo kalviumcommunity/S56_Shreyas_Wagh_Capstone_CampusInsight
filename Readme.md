@@ -14,3 +14,7 @@ CampusInsight is an online platform aimed at facilitating anonymous posting for 
 # Deployed Frontend
 
 The frontend of AnonymS is deployed at :- https://client-shreyas2004wagh-shreyas2004waghs-projects.vercel.app/
+
+# Deployed Frontend
+
+The backend of AnonymS is deployed at :- https://s56-shreyas-wagh-capstone-campusinsight.onrender.com
