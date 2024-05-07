@@ -6,7 +6,8 @@ export default defineConfig(({ mode }) => {
   return {
     define: {
       'API_URI': JSON.stringify(env.API_URI),
-      'login_uri': JSON.stringify(env.login_uri)
+      'login_uri': JSON.stringify(env.login_uri),
+      'GET_USERS_URL': JSON.stringify(env.GET_USERS_URL)
     },
     plugins: [react()],
 };
