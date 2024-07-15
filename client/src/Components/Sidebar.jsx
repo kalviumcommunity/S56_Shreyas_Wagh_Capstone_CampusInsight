@@ -1,26 +1,29 @@
-import React from 'react';
-import './Styles/Sidebar.css';
-import MountainIcon from '../Components/MountainIcon';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 import cookie from 'js-cookie';
-import axios from 'axios';
+import MountainIcon from '../Components/MountainIcon';
+import PostModal from '../Components/PostModal'; // import the new PostModal component
+import './Styles/Sidebar.css';
 
 const Sidebar = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
- useEffect(() => {
+  useEffect(() => {
     const username = cookie.get('username');
     setUsername(username);
   }, []);
-
 
   const handleLogout = () => {
     cookie.remove('userToken');
     cookie.remove('userEmail');
     cookie.remove('username');
     navigate('/');
+  };
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
   return (
@@ -65,12 +68,13 @@ const Sidebar = () => {
           <span onClick={handleLogout}>Logout</span>
         </li>
       </ul>
-      <button className="sidebar-button">Post</button>
-       <div className='info'>
+      <button className="sidebar-button" onClick={toggleModal}>Post</button>
+      <div className='info'>
         <p>{username}</p>
       </div>
+      <PostModal isOpen={isModalOpen} onClose={toggleModal} />
     </div>
   );
-}
+};
 
 export default Sidebar;

@@ -1,0 +1,29 @@
+.message-input {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.message-input textarea {
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+}
+
+.message-input button {
+    align-self: flex-end;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.message-input button:hover {
+    background-color: #0d8ed5;
+}
