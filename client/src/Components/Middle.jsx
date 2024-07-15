@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Styles/Middle.css';
 import moment from 'moment-timezone';
 import axios from 'axios';
+import MessageInput from './MessageInput';
 
 const Middle = ({ messages }) => {
   const getUserTimezone = () => {
@@ -11,10 +12,29 @@ const Middle = ({ messages }) => {
 
   const [updatedMessages, setUpdatedMessages] = useState(messages);
   const [likedMessages, setLikedMessages] = useState([]);
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     setUpdatedMessages(messages); 
   }, [messages]);
+
+  useEffect(() => {
+    const fetchUsername = () => {
+      try {
+        const usernameCookie = document.cookie.split('; ').find(row => row.startsWith('username='));
+        if (usernameCookie) {
+          const username = usernameCookie.split('=')[1];
+          setUsername(username);
+        } else {
+          console.warn('Username cookie not found');
+        }
+      } catch (error) {
+        console.error('Error parsing username cookie:', error);
+      }
+    };
+
+    fetchUsername();
+  }, []);
 
   const handleLike = async (messageId) => {
     try {
@@ -48,8 +68,13 @@ const Middle = ({ messages }) => {
     }
   };
 
+  const handleNewMessage = (newMessage) => {
+    setUpdatedMessages([newMessage, ...updatedMessages]);
+  };
+
   return (
     <div className="message-feed">
+      <MessageInput onNewMessage={handleNewMessage} username={username} />
       <div className="feed">
         {updatedMessages.map((message) => (
           <div className="message" key={message._id}>
@@ -73,6 +98,6 @@ const Middle = ({ messages }) => {
       </div>
     </div>
   );
-}
+};
 
 export default Middle;

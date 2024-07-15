@@ -113,7 +113,6 @@ router.post('/postMessage', async (req, res) => {
             username: username 
         });
         await newMessage.save();
-
         res.status(201).json({ success: true, message: 'Message posted successfully' });
     } catch (error) {
         console.error('Error posting message:', error);
