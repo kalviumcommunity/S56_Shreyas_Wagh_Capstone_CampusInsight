@@ -20,8 +20,17 @@ const Middle = ({ messages }) => {
 
   useEffect(() => {
     const fetchUsername = () => {
-      const username = document.cookie.split('; ').find(row => row.startsWith('username=')).split('=')[1];
-      setUsername(username);
+      try {
+        const usernameCookie = document.cookie.split('; ').find(row => row.startsWith('username='));
+        if (usernameCookie) {
+          const username = usernameCookie.split('=')[1];
+          setUsername(username);
+        } else {
+          console.warn('Username cookie not found');
+        }
+      } catch (error) {
+        console.error('Error parsing username cookie:', error);
+      }
     };
 
     fetchUsername();
