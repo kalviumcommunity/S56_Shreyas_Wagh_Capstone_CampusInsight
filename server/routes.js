@@ -121,37 +121,70 @@ router.post('/postMessage', async (req, res) => {
 });
 
 router.post('/likeMessage', async (req, res) => {
-    try {
-        const messageId = req.body.messageId;
-        const msg = await message.findById(messageId);
-        if (!msg) {
-            return res.status(404).json({ message: 'Message not found' });
-        }
-        msg.likes++;
-        await msg.save();
-        res.status(200).json({ message: 'Likes incremented successfully' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+  try {
+    const { messageId, username } = req.body;
+    const msg = await message.findById(messageId);
+    const user = await Details.findOne({ username });
+
+    if (!msg || !user) {
+      return res.status(404).json({ message: 'Message or user not found' });
     }
+
+    if (!user.likedMessages.includes(messageId)) {
+      user.likedMessages.push(messageId);
+      msg.likes++;
+      await user.save();
+      await msg.save();
+    }
+
+    res.status(200).json({ message: 'Likes incremented successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 router.post('/unlikeMessage', async (req, res) => {
-    try {
-        const messageId = req.body.messageId;
-        const msg = await message.findById(messageId);
-        if (!msg) {
-            return res.status(404).json({ message: 'Message not found' });
-        }
-        if (msg.likes > 0) {
-            msg.likes--;
-            await msg.save();
-        }
-        res.status(200).json({ message: 'Likes decremented successfully' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+  try {
+    const { messageId, username } = req.body;
+    const msg = await message.findById(messageId);
+    const user = await Details.findOne({ username });
+
+    if (!msg || !user) {
+      return res.status(404).json({ message: 'Message or user not found' });
     }
+
+    if (user.likedMessages.includes(messageId)) {
+      user.likedMessages = user.likedMessages.filter(id => id.toString() !== messageId);
+      if (msg.likes > 0) {
+        msg.likes--;
+      }
+      await user.save();
+      await msg.save();
+    }
+
+    res.status(200).json({ message: 'Likes decremented successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
+
+router.get('/likedMessages', async (req, res) => {
+  try {
+    const { username } = req.query;
+    const user = await Details.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ likedMessages: user.likedMessages });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 module.exports = router;
