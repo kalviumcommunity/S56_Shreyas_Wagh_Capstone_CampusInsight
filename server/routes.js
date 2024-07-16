@@ -21,22 +21,31 @@ router.get('/getUsers', async (req, res) => {
 
 router.post('/SignUp', async (req, res) => {
     try {
-        const {firstName,lastName, email, password } = req.body;
+        const { firstName, lastName, email, password } = req.body;
         const existingUser = await Details.findOne({ email });
 
         if (existingUser) {
             return res.status(400).json({ message: 'Email already exists' });
         }
+
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new Details({firstName,lastName, email, password: hashedPassword });
+        const newUser = new Details({ firstName, lastName, email, password: hashedPassword });
+
         await newUser.save();
-         const token = jwt.sign({ email: newUser.email }, 'JWT_SECRET'); 
+        const token = jwt.sign({ email: newUser.email }, process.env.JWT_SECRET);
+
         res.status(201).json({ message: 'User signed up successfully', token });
     } catch (error) {
+        if (error.code === 11000) { 
+            const field = Object.keys(error.keyValue)[0];
+            const message = `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`;
+            return res.status(400).json({ message });
+        }
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
 
 router.post('/SignUp/Username', async (req, res) => {
     try {
@@ -57,10 +66,16 @@ router.post('/SignUp/Username', async (req, res) => {
         res.cookie('username', username, { httpOnly: true });
         res.status(200).json({ message: 'Username added successfully' });
     } catch (error) {
+        if (error.code === 11000) { 
+            const field = Object.keys(error.keyValue)[0];
+            const message = `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`;
+            return res.status(400).json({ message });
+        }
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
 
 router.post('/login', async (req, res) => {
     try {
@@ -70,11 +85,13 @@ router.post('/login', async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
+
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Invalid password' });
         }
+
         const username = user.username;
         jwt.sign({ email: user.email, username }, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
             if (err) {
@@ -121,37 +138,94 @@ router.post('/postMessage', async (req, res) => {
 });
 
 router.post('/likeMessage', async (req, res) => {
-    try {
-        const messageId = req.body.messageId;
-        const msg = await message.findById(messageId);
-        if (!msg) {
-            return res.status(404).json({ message: 'Message not found' });
-        }
-        msg.likes++;
-        await msg.save();
-        res.status(200).json({ message: 'Likes incremented successfully' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+  try {
+    const { messageId, username } = req.body;
+
+    if (!messageId || !username) {
+      return res.status(400).json({ message: 'Message ID and username are required' });
     }
+
+    const msg = await message.findById(messageId);
+    const user = await Details.findOne({ username });
+
+    if (!msg) {
+      return res.status(404).json({ message: 'Message not found' });
+    }
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (!user.likedMessages.includes(messageId)) {
+      user.likedMessages.push(messageId);
+      msg.likes++;
+      await user.save();
+      await msg.save();
+    }
+
+    res.status(200).json({ message: 'Likes incremented successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 router.post('/unlikeMessage', async (req, res) => {
-    try {
-        const messageId = req.body.messageId;
-        const msg = await message.findById(messageId);
-        if (!msg) {
-            return res.status(404).json({ message: 'Message not found' });
-        }
-        if (msg.likes > 0) {
-            msg.likes--;
-            await msg.save();
-        }
-        res.status(200).json({ message: 'Likes decremented successfully' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+  try {
+    const { messageId, username } = req.body;
+
+    if (!messageId || !username) {
+      return res.status(400).json({ message: 'Message ID and username are required' });
     }
+
+    const msg = await message.findById(messageId);
+    const user = await Details.findOne({ username });
+
+    if (!msg) {
+      return res.status(404).json({ message: 'Message not found' });
+    }
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (user.likedMessages.includes(messageId)) {
+      user.likedMessages = user.likedMessages.filter(id => id.toString() !== messageId);
+      if (msg.likes > 0) {
+        msg.likes--;
+      }
+      await user.save();
+      await msg.save();
+    }
+
+    res.status(200).json({ message: 'Likes decremented successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
+
+router.get('/likedMessages', async (req, res) => {
+  try {
+    const { username } = req.query;
+
+    if (!username) {
+      return res.status(400).json({ message: 'Username is required' });
+    }
+
+    const user = await Details.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ likedMessages: user.likedMessages });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
 
 module.exports = router;

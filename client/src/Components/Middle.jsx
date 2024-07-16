@@ -3,6 +3,8 @@ import './Styles/Middle.css';
 import moment from 'moment-timezone';
 import axios from 'axios';
 import MessageInput from './MessageInput';
+import { CiHeart } from "react-icons/ci";
+import { FaHeart } from "react-icons/fa";
 
 const Middle = ({ messages }) => {
   const getUserTimezone = () => {
@@ -33,13 +35,25 @@ const Middle = ({ messages }) => {
       }
     };
 
+    const fetchLikedMessages = async (username) => {
+      try {
+        const response = await axios.get(`https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/likedMessages?username=${username}`);
+        setLikedMessages(response.data.likedMessages);
+      } catch (error) {
+        console.error('Error fetching liked messages:', error);
+      }
+    };
+
     fetchUsername();
-  }, []);
+    if (username) {
+      fetchLikedMessages(username);
+    }
+  }, [username]);
 
   const handleLike = async (messageId) => {
     try {
       if (!likedMessages.includes(messageId)) {
-        await axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/likeMessage', { messageId });
+        await axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/likeMessage', { messageId, username });
         setLikedMessages([...likedMessages, messageId]);
         setUpdatedMessages(prevMessages =>
           prevMessages.map(msg =>
@@ -55,7 +69,7 @@ const Middle = ({ messages }) => {
   const handleUnlike = async (messageId) => {
     try {
       if (likedMessages.includes(messageId)) {
-        await axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/unlikeMessage', { messageId });
+        await axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/unlikeMessage', { messageId, username });
         setLikedMessages(likedMessages.filter(id => id !== messageId));
         setUpdatedMessages(prevMessages =>
           prevMessages.map(msg =>
@@ -88,9 +102,9 @@ const Middle = ({ messages }) => {
               <span className="timestamp">{moment(message.timestamp).tz(userTimezone).format('YYYY-MM-DD HH:mm:ss')}</span>
               <span className="likes">{message.likes} Likes</span>
               {!likedMessages.includes(message._id) ? (
-                <button onClick={() => handleLike(message._id)}>Like</button>
+                <button onClick={() => handleLike(message._id)}><CiHeart /></button>
               ) : (
-                <button onClick={() => handleUnlike(message._id)}>Unlike</button>
+                <button onClick={() => handleUnlike(message._id)}><FaHeart /></button>
               )}
             </div>
           </div>
