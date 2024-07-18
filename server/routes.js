@@ -5,9 +5,13 @@ const { message } = require("./models/Messages.js");
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const upload = require("./Multer");
+const cloudinary = require("./Cloudinary");
 require('dotenv').config();
 
 router.use(bodyParser.json());
+
+router.use(express.json());
 
 router.get('/getUsers', async (req, res) => {
     try {
@@ -227,5 +231,24 @@ router.get('/likedMessages', async (req, res) => {
 });
 
 
+router.post('/uploadImage', upload.single('image'), async (req, res) => {
+    try {
+        console.log(req.file);  
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            resource_type: "image"
+        });
+
+        res.status(200).json({
+            message: 'Image uploaded successfully',
+            imageUrl: result.secure_url
+        });
+    } catch (error) {
+        console.error('Error uploading image:', error);
+        res.status(500).json({
+            message: 'Error uploading image',
+            error: error.message
+        });
+    }
+});
 
 module.exports = router;
