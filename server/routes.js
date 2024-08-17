@@ -233,7 +233,7 @@ router.get('/likedMessages', async (req, res) => {
 
 router.post('/uploadImage', upload.single('image'), async (req, res) => {
     try {
-        console.log(req.file);  
+        console.log(req.file);  // Log the uploaded file information
         const result = await cloudinary.uploader.upload(req.file.path, {
             resource_type: "image"
         });
