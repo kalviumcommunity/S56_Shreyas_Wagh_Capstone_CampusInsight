@@ -23,6 +23,34 @@ router.get('/getUsers', async (req, res) => {
     }
 });
 
+router.get('/getUser/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        let result = await Details.findById(userId);
+        res.json(result);   
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+router.get('/getUserByEmail/:email', async (req, res) => {
+    try {
+        const email = req.params.email;
+        const user = await Details.findOne({ email: email });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json(user);
+    } catch (error) {
+        console.error('Error fetching user by email:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
 router.post('/SignUp', async (req, res) => {
     try {
         const { firstName, lastName, email, password } = req.body;
