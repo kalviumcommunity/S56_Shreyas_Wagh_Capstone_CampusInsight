@@ -7,6 +7,7 @@ import HomePage from './Pages/HomePage'
 import Sidebar from './Components/Sidebar';
 import Middle from './Components/Middle';
 import Username from './Pages/Username';
+import Profile from './Pages/Profile';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -20,11 +21,9 @@ function App() {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/username" element={<Username />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
-    {/* <HomePage /> */}
-    {/* <Sidebar /> */}
-    {/* <Username /> */}
     </>
   )
 }

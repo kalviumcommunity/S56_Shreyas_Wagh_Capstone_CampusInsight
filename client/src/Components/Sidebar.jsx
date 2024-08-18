@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import cookie from 'js-cookie';
 import MountainIcon from '../Components/MountainIcon';
-import PostModal from '../Components/PostModal'; // import the new PostModal component
+import PostModal from '../Components/PostModal';
 import './Styles/Sidebar.css';
 
 const Sidebar = () => {
@@ -26,6 +26,10 @@ const Sidebar = () => {
     setIsModalOpen(!isModalOpen);
   };
 
+  const handleProfileClick = () => {
+    navigate('/profile'); // Navigate to the Profile Page
+  };
+
   return (
     <div className="sidebar">
       <div className="sidebar-header">
@@ -46,13 +50,13 @@ const Sidebar = () => {
           <span>Messages</span>
         </li>
         <li className="sidebar-menu-item">
-          <span>Bookmarks</span> 
+          <span>Bookmarks</span>
         </li>
         <li className="sidebar-menu-item">
-          <span>Lists</span> 
+          <span>Lists</span>
         </li>
         <br />
-        <li className="sidebar-menu-item">
+        <li className="sidebar-menu-item" onClick={handleProfileClick}>
           <span>Profile</span>
         </li>
         <br />
