@@ -13,7 +13,7 @@ function Navbar() {
     <header className="navbar">
       <div className="navbar-logo">
         <MountainIcon />
-        <span className="visually-hidden">AnonymS</span>
+        <span className="visually-hidden">AnonymX</span>
       </div>
       <nav className="navbar-nav">
         <span>Home</span>
