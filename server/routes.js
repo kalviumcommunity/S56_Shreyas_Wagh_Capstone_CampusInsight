@@ -284,29 +284,52 @@ router.put("/updateUser/:id", async (req, res) => {
     const userId = req.params.id;
     const { firstName, lastName } = req.body;
 
+    // Check if firstName and lastName are provided
     if (!firstName || !lastName) {
       return res
         .status(400)
         .json({ message: "First name and last name are required" });
     }
 
+    // Try to update the user
     const updatedUser = await Details.findByIdAndUpdate(
       userId,
       { firstName, lastName },
       { new: true } // Returns the updated document
     );
 
+    // If user not found, send a 404 response
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
+    // Send successful response with updated user
     res.status(200).json({
       message: "User details updated successfully",
       user: updatedUser,
     });
   } catch (error) {
-    console.error("Error updating user details:", error);
-    res.status(500).json({ message: "Internal server error" });
+    // Handle specific error types if possible
+    if (error.name === "CastError") {
+      // If the userId is not a valid ObjectId
+      return res.status(400).json({ message: "Invalid user ID format" });
+    } else if (error.name === "ValidationError") {
+      // If there's a validation error with the user data
+      return res
+        .status(400)
+        .json({ message: `Validation error: ${error.message}` });
+    } else {
+      // Log the full error for debugging purposes
+      console.error("Error updating user details:", error);
+
+      // Send generic server error response to the client
+      return res
+        .status(500)
+        .json({
+          message:
+            "An error occurred while updating user details. Please try again later.",
+        });
+    }
   }
 });
 

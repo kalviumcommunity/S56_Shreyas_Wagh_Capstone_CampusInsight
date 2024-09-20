@@ -9,6 +9,7 @@ function ProfilePage() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [isEditing, setIsEditing] = useState(false);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         const userEmail = Cookies.get('userEmail');  // Fetch email from cookies
@@ -30,13 +31,35 @@ function ProfilePage() {
             });
     }, []);
 
+    // Validation function for form fields
+    const validateFields = () => {
+        if (!firstName.trim() || !lastName.trim()) {
+            setError('First name and last name cannot be empty');
+            return false;
+        }
+
+        if (firstName.length < 2 || lastName.length < 2) {
+            setError('First name and last name must be at least 2 characters long');
+            return false;
+        }
+
+        return true;
+    };
+
     const handleEdit = () => {
         setIsEditing(true);
+        setError(''); // Clear any previous error when entering edit mode
     };
 
     const handleSave = () => {
-        if (!user || !firstName || !lastName) return;
+        if (!user) return;
 
+        // Run validation before saving
+        if (!validateFields()) {
+            return;
+        }
+
+        // If validation passes, send the PUT request
         axios.put(`http://localhost:3000/updateUser/${user._id}`, {
             firstName,
             lastName
@@ -48,6 +71,7 @@ function ProfilePage() {
         })
         .catch(error => {
             console.error('Error updating user information:', error);
+            setError('There was an error updating your profile. Please try again.');
         });
     };
 
@@ -87,6 +111,8 @@ function ProfilePage() {
                     <span>{user.lastName}</span>
                 )}
             </div>
+
+            {error && <p className="error-message">{error}</p>}
 
             <div className="button-container">
                 {isEditing ? (
