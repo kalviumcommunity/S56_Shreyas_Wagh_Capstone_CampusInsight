@@ -1,21 +1,86 @@
 .profile-container {
-    max-width: 600px;
+    max-width: 700px;
     margin: 0 auto;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    font-family: Arial, sans-serif;
+    padding: 30px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Helvetica', sans-serif;
+    color: #333;
 }
 
 .profile-container h1 {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    color: #1a1a1a;
 }
 
 .profile-container p {
     font-size: 18px;
-    margin: 5px 0;
-    color: #555;
+    margin: 8px 0;
+    color: #777;
+}
+
+.edit-section {
+    margin: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.edit-section label {
+    font-weight: bold;
+    font-size: 18px;
+    color: #444;
+}
+
+.edit-section span,
+.edit-section input {
+    font-size: 18px;
+    border: none;
+    background-color: #f0f2f5;
+    padding: 8px;
+    border-radius: 6px;
+    width: 70%;
+}
+
+.edit-section input {
+    padding-left: 10px;
+    border: 1px solid #ccc;
+}
+
+.button-container {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.button-container button {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button-container button:hover {
+    background-color: #135bb0;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 20px;
+    }
+
+    .edit-section input,
+    .edit-section span {
+        width: 100%;
+    }
+
+    .button-container {
+        text-align: center;
+    }
 }

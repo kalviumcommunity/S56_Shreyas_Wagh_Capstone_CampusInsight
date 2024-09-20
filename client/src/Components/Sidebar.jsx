@@ -30,13 +30,17 @@ const Sidebar = () => {
     navigate('/profile'); // Navigate to the Profile Page
   };
 
+  const handleHomeClick = () => {
+    navigate('/home'); // Navigate to the Home Page
+  };
+
   return (
     <div className="sidebar">
       <div className="sidebar-header">
         <MountainIcon />
       </div>
       <ul className="sidebar-menu">
-        <li className="sidebar-menu-item">
+        <li className="sidebar-menu-item" onClick={handleHomeClick}>
           <span>Home</span>
         </li>
         <br />
@@ -73,7 +77,7 @@ const Sidebar = () => {
         </li>
       </ul>
       <button className="sidebar-button" onClick={toggleModal}>Post</button>
-      <div className='info'>
+      <div className="info">
         <p>{username}</p>
       </div>
       <PostModal isOpen={isModalOpen} onClose={toggleModal} />
