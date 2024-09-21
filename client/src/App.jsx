@@ -8,6 +8,7 @@ import Sidebar from './Components/Sidebar';
 import Middle from './Components/Middle';
 import Username from './Pages/Username';
 import Profile from './Pages/Profile';
+import BookMarks from './Pages/BookMarks';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -22,6 +23,7 @@ function App() {
         <Route path="/home" element={<HomePage />} />
         <Route path="/username" element={<Username />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/bookmarks" element={<BookMarks />} />
       </Routes>
     </Router>
     </>

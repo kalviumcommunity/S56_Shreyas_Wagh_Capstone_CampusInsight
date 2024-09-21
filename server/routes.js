@@ -333,4 +333,124 @@ router.put("/updateUser/:id", async (req, res) => {
   }
 });
 
+router.post("/bookmarkMessage", async (req, res) => {
+  try {
+    const { messageId, username } = req.body;
+
+    if (!messageId || !username) {
+      return res
+        .status(400)
+        .json({ message: "Message ID and username are required" });
+    }
+
+    const msg = await message.findById(messageId); // Use lowercase "message"
+    const user = await Details.findOne({ username });
+
+    if (!msg) {
+      return res.status(404).json({ message: "Message not found" });
+    }
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Add to bookmarks if not already bookmarked
+    if (!user.bookmarkedMessages.includes(messageId)) {
+      user.bookmarkedMessages.push(messageId);
+      await user.save();
+    }
+
+    res.status(200).json({ message: "Message bookmarked successfully" });
+  } catch (error) {
+    console.error("Error bookmarking message:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Unbookmark a message
+router.post("/unbookmarkMessage", async (req, res) => {
+  try {
+    const { messageId, username } = req.body;
+
+    if (!messageId || !username) {
+      return res
+        .status(400)
+        .json({ message: "Message ID and username are required" });
+    }
+
+    const user = await Details.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Remove from bookmarks if it exists
+    if (user.bookmarkedMessages.includes(messageId)) {
+      user.bookmarkedMessages = user.bookmarkedMessages.filter(
+        (id) => id.toString() !== messageId
+      );
+      await user.save();
+    }
+
+    res.status(200).json({ message: "Message unbookmarked successfully" });
+  } catch (error) {
+    console.error("Error unbookmarking message:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Ensure populate uses the correct model name ("message" lowercase)
+router.get("/bookmarkedMessages", async (req, res) => {
+  try {
+    const { username } = req.query;
+
+    if (!username) {
+      return res.status(400).json({ message: "Username is required" });
+    }
+
+    const user = await Details.findOne({ username }).populate('bookmarkedMessages', null, 'message'); 
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ bookmarkedMessages: user.bookmarkedMessages });
+  } catch (error) {
+    console.error("Error fetching bookmarked messages:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.post("/removeBookmark", async (req, res) => {
+  try {
+    const { messageId, username } = req.body;
+
+    if (!messageId || !username) {
+      return res
+        .status(400)
+        .json({ message: "Message ID and username are required" });
+    }
+
+    const user = await Details.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Remove from bookmarks if exists
+    if (user.bookmarkedMessages.includes(messageId)) {
+      user.bookmarkedMessages = user.bookmarkedMessages.filter(
+        (id) => id.toString() !== messageId
+      );
+      await user.save();
+    }
+
+    res.status(200).json({ message: "Message removed from bookmarks" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 module.exports = router;
+     
