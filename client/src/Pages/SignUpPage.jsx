@@ -3,6 +3,7 @@ import './Styles/SignupPage.css';
 import MountainIcon from '../Components/MountainIcon';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import axios from 'axios'; 
 import cookie from 'js-cookie';
 
@@ -12,6 +13,7 @@ const SignUpPage = () => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const clientId = '74212427658-976mh289boiprbga1me1ermdbpvksiij.apps.googleusercontent.com';
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,6 +38,22 @@ const SignUpPage = () => {
       .catch(error => {
         console.error('Error submitting form:', error);
       });
+  };
+
+  const onSuccess = (res) => {
+    console.log('Google SignUp successful!🎉', res);
+    alert('Google SignUp successful!🎉');
+    cookie.set('googleToken', res.credential);  // Save Google token
+    setFirstName('');
+    setLastName('');
+    setEmail('');
+    setPassword('');
+    navigate('/home');  // Redirect to home or the desired route
+  };
+
+  const onError = () => {
+    console.log('Google SignUp Failed');
+    alert('Google SignUp Failed. Please try again.');
   };
 
   return (
@@ -86,14 +104,25 @@ const SignUpPage = () => {
         </div>
          <button type="submit" className='signUp'>Sign Up</button>
       </form>
+
       <p className="agreement-text">By clicking Sign Up, you agree to our <u>Terms of Service</u> and <u>Privacy Policy</u></p>
       <p className="left-align1">Join the Conversation</p>
       <p className="left-align2">Sign up to connect with friends, share photos, and be inspired.</p>
+
       <div className="sign-up-buttons">
-        <button>Sign up with Google</button>
+        <div className="google">
+          <GoogleOAuthProvider clientId={clientId}> 
+            <GoogleLogin
+              onSuccess={onSuccess}
+              onError={onError}
+            />
+          </GoogleOAuthProvider>
+        </div>
+
         <button>Sign up with Facebook</button>
         <button>Sign up with Apple</button>
       </div>
+      
       <p>Already have an account? <Link to={"/login"}>Login</Link></p>
     </div>
   );
