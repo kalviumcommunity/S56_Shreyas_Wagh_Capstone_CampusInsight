@@ -5,6 +5,7 @@ import axios from 'axios';
 import MessageInput from './MessageInput';
 import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
+import { CiBookmark, CiBookmarkCheck } from "react-icons/ci";
 
 const Middle = ({ messages }) => {
   const getUserTimezone = () => {
@@ -14,6 +15,7 @@ const Middle = ({ messages }) => {
 
   const [updatedMessages, setUpdatedMessages] = useState(messages);
   const [likedMessages, setLikedMessages] = useState([]);
+  const [bookmarkedMessages, setBookmarkedMessages] = useState([]);
   const [username, setUsername] = useState('');
 
   useEffect(() => {
@@ -44,9 +46,19 @@ const Middle = ({ messages }) => {
       }
     };
 
+    const fetchBookmarkedMessages = async (username) => {
+      try {
+        const response = await axios.get(`http://localhost:3000/bookmarkedMessages?username=${username}`);
+        setBookmarkedMessages(response.data.bookmarkedMessages);
+      } catch (error) {
+        console.error('Error fetching bookmarked messages:', error);
+      }
+    };
+
     fetchUsername();
     if (username) {
       fetchLikedMessages(username);
+      fetchBookmarkedMessages(username);
     }
   }, [username]);
 
@@ -82,6 +94,28 @@ const Middle = ({ messages }) => {
     }
   };
 
+  const handleBookmark = async (messageId) => {
+    try {
+      if (!bookmarkedMessages.includes(messageId)) {
+        await axios.post('http://localhost:3000/bookmarkMessage', { messageId, username });
+        setBookmarkedMessages([...bookmarkedMessages, messageId]);
+      }
+    } catch (error) {
+      console.error('Error bookmarking message:', error);
+    }
+  };
+
+  const handleUnbookmark = async (messageId) => {
+    try {
+      if (bookmarkedMessages.includes(messageId)) {
+        await axios.post('http://localhost:3000/unbookmarkMessage', { messageId, username });
+        setBookmarkedMessages(bookmarkedMessages.filter(id => id !== messageId));
+      }
+    } catch (error) {
+      console.error('Error unbookmarking message:', error);
+    }
+  };
+
   const handleNewMessage = (newMessage) => {
     setUpdatedMessages([newMessage, ...updatedMessages]);
   };
@@ -105,6 +139,11 @@ const Middle = ({ messages }) => {
                 <button onClick={() => handleLike(message._id)}><CiHeart /></button>
               ) : (
                 <button onClick={() => handleUnlike(message._id)}><FaHeart /></button>
+              )}
+              {!bookmarkedMessages.includes(message._id) ? (
+                <button onClick={() => handleBookmark(message._id)}><CiBookmark /></button>
+              ) : (
+                <button onClick={() => handleUnbookmark(message._id)}><CiBookmarkCheck /></button>
               )}
             </div>
           </div>

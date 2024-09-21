@@ -34,6 +34,10 @@ const Sidebar = () => {
     navigate('/home'); // Navigate to the Home Page
   };
 
+  const handleBookmarksClick = () => {
+    navigate('/bookmarks'); // Navigate to the Bookmarks Page
+  };
+
   return (
     <div className="sidebar">
       <div className="sidebar-header">
@@ -53,7 +57,7 @@ const Sidebar = () => {
         <li className="sidebar-menu-item">
           <span>Messages</span>
         </li>
-        <li className="sidebar-menu-item">
+        <li className="sidebar-menu-item" onClick={handleBookmarksClick}>
           <span>Bookmarks</span>
         </li>
         <li className="sidebar-menu-item">
