@@ -16,8 +16,8 @@ router.use(bodyParser.json());
 router.use(express.json());
 
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, 
-  max: 100, 
+  windowMs: 5 * 60 * 1000, 
+  max: 20, 
   message: "Too many requests from this IP, please try again after 15 minutes",
 });
 
