@@ -48,12 +48,12 @@
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background: #1da1f2;
+    background: black;
     color: white;
     cursor: pointer;
     transition: background 0.3s;
 }
 
 .modal-content button:hover {
-    background: #0d8de0;
+    background: #333;
 }

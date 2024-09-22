@@ -5,8 +5,8 @@ const { message } = require("./models/Messages.js");
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
-const upload = require("./Multer");
-const cloudinary = require("./Cloudinary");
+const upload = require("./utils/multer");
+const cloudinary = require("./utils/cloudinary");
 require('dotenv').config();
 
 router.use(bodyParser.json());
@@ -140,7 +140,7 @@ router.post('/login', async (req, res) => {
 
 router.get('/getMessages', async (req, res) => {
     try {
-        let result = await message.find({});
+        let result = await message.find({}).sort({ timestamp: -1 });
         res.json(result);
     } catch (error) {
         console.error(error);
@@ -148,25 +148,55 @@ router.get('/getMessages', async (req, res) => {
     }
 });
 
-router.post('/postMessage', async (req, res) => {
-    try {
-        const { message: messageContent, username } = req.body; 
-        if (!messageContent || messageContent.trim() === '') {
-            return res.status(400).json({ success: false, error: 'Message content is required' });
-        }
-        if (!username || username.trim() === '') {
-            return res.status(400).json({ success: false, error: 'Username is required' });
-        }
-        const newMessage = new message({
-            message: messageContent,
-            username: username 
-        });
-        await newMessage.save();
-        res.status(201).json({ success: true, message: 'Message posted successfully' });
-    } catch (error) {
-        console.error('Error posting message:', error);
-        res.status(500).json({ success: false, error: 'Failed to post message' });
+router.post("/postMessage", upload.single("image"), async (req, res) => {
+  try {
+    const { message: messageContent, username } = req.body;
+
+    // Validation for message and username
+    if (!messageContent || messageContent.trim() === "") {
+      return res
+        .status(400)
+        .json({ success: false, error: "Message content is required" });
     }
+    if (!username || username.trim() === "") {
+      return res
+        .status(400)
+        .json({ success: false, error: "Username is required" });
+    }
+
+    // Initialize image variables
+    let imageUrl = null;
+    let imagePublicId = null;
+
+    // If an image is provided, upload to Cloudinary
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path); // Upload image to Cloudinary
+      imageUrl = result.secure_url; // Secure URL from Cloudinary response
+      imagePublicId = result.public_id; // Public ID for future reference (delete/update)
+    }
+
+    // Create new message object
+    const newMessage = new message({
+      message: messageContent,
+      username: username,
+      imageUrl: imageUrl, // Add image URL to message if exists
+      imagePublicId: imagePublicId, // Add image public ID for management
+    });
+
+    // Save to database
+    await newMessage.save();
+
+    res
+      .status(201)
+      .json({
+        success: true,
+        message: "Message posted successfully",
+        data: newMessage,
+      });
+  } catch (error) {
+    console.error("Error posting message:", error);
+    res.status(500).json({ success: false, error: "Failed to post message" });
+  }
 });
 
 router.post('/likeMessage', async (req, res) => {
@@ -256,27 +286,6 @@ router.get('/likedMessages', async (req, res) => {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
-});
-
-
-router.post('/uploadImage', upload.single('image'), async (req, res) => {
-    try {
-        console.log(req.file);  
-        const result = await cloudinary.uploader.upload(req.file.path, {
-            resource_type: "image"
-        });
-
-        res.status(200).json({
-            message: 'Image uploaded successfully',
-            imageUrl: result.secure_url
-        });
-    } catch (error) {
-        console.error('Error uploading image:', error);
-        res.status(500).json({
-            message: 'Error uploading image',
-            error: error.message
-        });
-    }
 });
 
 router.put("/updateUser/:id", async (req, res) => {
@@ -450,6 +459,24 @@ router.post("/removeBookmark", async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
+});
+
+router.post("/upload", upload.single("image"), function (req, res) {
+  cloudinary.uploader.upload(req.file.path, function (err, result) {
+    if (err) {
+      console.log("Image cannot be uploaed:", err);
+      return res.status(500).json({
+        success: false,
+        message: "Error uploading image",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Uploaded!",
+      data: result,
+    });
+  });
 });
 
 module.exports = router;

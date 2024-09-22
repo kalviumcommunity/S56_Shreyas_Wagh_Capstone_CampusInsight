@@ -131,6 +131,7 @@ const Middle = ({ messages }) => {
             </div>
             <div className="content">
               <p>{message.message}</p>
+              {message.imageUrl && <img src={message.imageUrl} alt="Uploaded Content" className="message-image" />}
             </div>
             <div className="metadata">
               <span className="timestamp">{moment(message.timestamp).tz(userTimezone).format('YYYY-MM-DD HH:mm:ss')}</span>
