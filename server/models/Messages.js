@@ -20,8 +20,16 @@ const messageSchema = new mongoose.Schema(
       index: true,
     },
     bookmarks: {
-      type: [String], 
+      type: [String],
       default: [],
+    },
+    imageUrl: {
+      type: String,
+      default: null,
+    },
+    imagePublicId: {
+      type: String,
+      default: null,
     },
   },
   { versionKey: false }

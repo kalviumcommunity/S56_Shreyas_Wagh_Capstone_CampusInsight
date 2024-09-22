@@ -4,48 +4,73 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f8fa;
 }
 
 .message-feed .feed {
     border-top: 1px solid #e1e8ed;
+    padding-top: 10px;
 }
 
+/* Styling for each message */
 .message-feed .message {
-    padding: 15px 0;
-    border-bottom: 1px solid #e1e8ed;
+    background-color: #ffffff;
+    /* White card background */
+    border: 1px solid #e1e8ed;
+    /* Card-like border */
+    border-radius: 8px;
+    /* Rounded corners for the card */
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    /* Slight shadow to elevate the message card */
+    transition: box-shadow 0.3s ease;
+    /* Smooth transition for hover */
+}
+
+.message-feed .message:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Elevated shadow on hover */
 }
 
 .message-feed .user-info {
-    margin-bottom: 5px;
-}
-
-.message-feed .user-info span {
-    margin-right: 10px;
+    margin-bottom: 8px;
 }
 
 .message-feed .username {
-    font-weight: bold;
+    font-weight: 600;
+    color: #14171a;
+    font-size: 16px;
     display: block;
-    /* Ensure the username is displayed on a separate line */
 }
 
 .message-feed .content {
-    margin-bottom: 10px;
-    /* Add some space below the message content */
+    margin-bottom: 12px;
+    font-size: 15px;
+    color: #333;
+    line-height: 1.5;
+}
+
+.message-feed .content img {
+    max-width: 100%;
+    /* Ensures images are responsive */
+    border-radius: 6px;
+    margin-top: 10px;
 }
 
 .message-feed .metadata {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     color: #657786;
-    /* Set the color for timestamp and likes */
-    font-size: 14px;
-    /* Adjust font size for timestamp and likes */
+    font-size: 13px;
+    padding-top: 5px;
+    border-top: 1px solid #e1e8ed;
+    /* Divider between content and metadata */
 }
 
-.message-feed .metadata span {
-    margin-right: 10px;
-}
-
+/* Styling for the like and bookmark icons */
 .message-feed .actions button {
     margin-right: 10px;
     padding: 5px 10px;
@@ -54,9 +79,66 @@
     background-color: #e1e8ed;
     color: #657786;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    /* Space between icon and text */
+}
+
+.message-feed .actions button svg {
+    font-size: 18px;
 }
 
 .message-feed .actions button:hover {
     background-color: #ccd6dd;
+    transform: translateY(-2px);
+    /* Slight pop on hover */
+}
+
+.message-feed .actions {
+    display: flex;
+    align-items: center;
+}
+
+.message-feed .actions .likes,
+.message-feed .actions .bookmark {
+    display: inline-flex;
+    align-items: center;
+}
+
+.message-feed .actions .likes svg,
+.message-feed .actions .bookmark svg {
+    margin-right: 5px;
+    /* Space between icon and text */
+}
+
+.message-feed .timestamp {
+    color: #8899a6;
+    font-size: 12px;
+}
+
+/* Input box at the top */
+.message-feed input[type="text"],
+.message-feed input[type="file"] {
+    width: calc(100% - 20px);
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #e1e8ed;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.message-feed button[type="submit"] {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.message-feed button[type="submit"]:hover {
+    background-color: #333;
 }
