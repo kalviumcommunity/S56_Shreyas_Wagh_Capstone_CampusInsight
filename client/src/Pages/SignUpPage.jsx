@@ -14,9 +14,11 @@ const SignUpPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const clientId = '74212427658-976mh289boiprbga1me1ermdbpvksiij.apps.googleusercontent.com';
+  const [isSubmitting, setIsSubmitting] = useState(false); 
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsSubmitting(true); 
     const formData = {
       firstName: firstName,
       lastName: lastName,
@@ -37,23 +39,27 @@ const SignUpPage = () => {
       })
       .catch(error => {
         console.error('Error submitting form:', error);
+        alert('There was an issue creating your account. Please try again.');
+      })
+      .finally(() => {
+        setIsSubmitting(false); 
       });
   };
 
   const onSuccess = (res) => {
     console.log('Google SignUp successful!🎉', res);
     alert('Google SignUp successful!🎉');
-    cookie.set('googleToken', res.credential);  // Save Google token
+    cookie.set('googleToken', res.credential); 
     setFirstName('');
     setLastName('');
     setEmail('');
     setPassword('');
-    navigate('/home');  // Redirect to home or the desired route
+    navigate('/username'); 
   };
 
-  const onError = () => {
-    console.log('Google SignUp Failed');
-    alert('Google SignUp Failed. Please try again.');
+  const onError = (error) => {
+    console.error('Google SignUp Failed', error);
+    alert('Google Sign-Up failed due to a network issue or authorization error. Please check your internet connection and try again.');
   };
 
   return (
@@ -102,7 +108,9 @@ const SignUpPage = () => {
             required
           />
         </div>
-         <button type="submit" className='signUp'>Sign Up</button>
+         <button type="submit" className='signUp' disabled={isSubmitting}>
+           {isSubmitting ? 'Signing Up...' : 'Sign Up'}
+         </button>
       </form>
 
       <p className="agreement-text">By clicking Sign Up, you agree to our <u>Terms of Service</u> and <u>Privacy Policy</u></p>
@@ -114,7 +122,7 @@ const SignUpPage = () => {
           <GoogleOAuthProvider clientId={clientId}> 
             <GoogleLogin
               onSuccess={onSuccess}
-              onError={onError}
+              onError={onError} // Enhanced error handling
             />
           </GoogleOAuthProvider>
         </div>

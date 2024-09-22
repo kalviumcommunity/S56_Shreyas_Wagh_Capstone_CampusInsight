@@ -2,7 +2,6 @@
 .bookmarks-container {
     padding: 20px;
     margin-left: 250px;
-    /* Adjusted for sidebar */
     max-width: 800px;
     margin-top: 20px;
 }
@@ -10,15 +9,12 @@
 /* Individual message box */
 .message-box {
     background-color: #f9f9f9;
-    /* Light background for message card */
     border: 1px solid #e1e8ed;
     border-radius: 10px;
     padding: 20px;
     margin-bottom: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* Subtle shadow for depth */
     transition: box-shadow 0.3s ease;
-    /* Smooth hover effect */
 }
 
 .message-box:hover {
@@ -54,11 +50,8 @@
 .likes-container {
     display: flex;
     align-items: center;
-    color: #e0245e;
-    /* Twitter-like heart color */
     cursor: pointer;
     transition: transform 0.2s ease;
-    /* Animation on click */
 }
 
 .likes-container:hover {
@@ -100,7 +93,6 @@
 
 .sidebar a:hover {
     background-color: #e8f5fe;
-    /* Subtle blue hover for links */
     border-radius: 5px;
 }
 
