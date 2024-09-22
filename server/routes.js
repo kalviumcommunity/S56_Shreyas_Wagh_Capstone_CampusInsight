@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const upload = require("./utils/multer");
 const cloudinary = require("./utils/cloudinary");
+const fs = require("fs");
 require('dotenv').config();
 
 router.use(bodyParser.json());
@@ -461,22 +462,83 @@ router.post("/removeBookmark", async (req, res) => {
   }
 });
 
-router.post("/upload", upload.single("image"), function (req, res) {
-  cloudinary.uploader.upload(req.file.path, function (err, result) {
-    if (err) {
-      console.log("Image cannot be uploaed:", err);
-      return res.status(500).json({
-        success: false,
-        message: "Error uploading image",
-      });
+router.post("/postMessage", upload.single("image"), async (req, res) => {
+  try {
+    const { message: messageContent, username } = req.body;
+
+    if (!messageContent || validator.isEmpty(messageContent.trim())) {
+      return res
+        .status(400)
+        .json({ success: false, error: "Message content is required" });
+    }
+    if (!username || validator.isEmpty(username.trim())) {
+      return res
+        .status(400)
+        .json({ success: false, error: "Username is required" });
     }
 
-    res.status(200).json({
-      success: true,
-      message: "Uploaded!",
-      data: result,
+    let imageUrl = null;
+    let imagePublicId = null;
+
+    if (req.file) {
+      try {
+        const result = await cloudinary.uploader.upload(req.file.path);
+        imageUrl = result.secure_url; 
+        imagePublicId = result.public_id; 
+        fs.unlink(req.file.path, (unlinkErr) => {
+          if (unlinkErr) {
+            console.error("Failed to delete temp file:", unlinkErr);
+          }
+        });
+      } catch (uploadError) {
+        console.error("Error uploading image to Cloudinary:", uploadError);
+        if (req.file) {
+          fs.unlink(req.file.path, (unlinkErr) => {
+            if (unlinkErr) {
+              console.error(
+                "Failed to delete temp file after upload failure:",
+                unlinkErr
+              );
+            }
+          });
+        }
+
+        return res.status(500).json({
+          success: false,
+          error: "Image upload failed. Please try again.",
+        });
+      }
+    }
+
+    const newMessage = new message({
+      message: messageContent,
+      username: username,
+      imageUrl: imageUrl, 
+      imagePublicId: imagePublicId, 
     });
-  });
+
+    // Save to database
+    try {
+      await newMessage.save();
+      res.status(201).json({
+        success: true,
+        message: "Message posted successfully",
+        data: newMessage,
+      });
+    } catch (dbError) {
+      console.error("Error saving message to database:", dbError);
+      return res.status(500).json({
+        success: false,
+        error: "Failed to save message to the database. Please try again.",
+      });
+    }
+  } catch (error) {
+    console.error("Unexpected error occurred:", error);
+    res.status(500).json({
+      success: false,
+      error: "An unexpected error occurred. Please try again.",
+    });
+  }
 });
 
 module.exports = router;
