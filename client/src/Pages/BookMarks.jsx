@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';  // Import js-cookie
 import Sidebar from '../Components/Sidebar';
 import './Styles/BookMarks.css';
+import { FaHeart } from "react-icons/fa";
 
 const BookMarks = () => {
   const [bookmarkedMessages, setBookmarkedMessages] = useState([]);
@@ -49,7 +50,6 @@ const BookMarks = () => {
       .then((response) => response.json())
       .then((data) => {
         if (data.message === 'Message removed from bookmarks') {
-          // Update UI by removing the message from the local state
           setBookmarkedMessages((prevMessages) =>
             prevMessages.filter((msg) => msg._id !== messageId)
           );
@@ -74,10 +74,9 @@ const BookMarks = () => {
               <div className="message-info">
                 <span>{new Date(messageObj.timestamp).toLocaleString()}</span>
                 <div className="likes-container">
-                  <span className="likes-icon">❤️</span>
+                  <span className="likes-icon"><FaHeart /></span>
                   <span className="likes-count">{messageObj.likes} Likes</span>
                 </div>
-                {/* Remove Bookmark Icon */}
                 <button
                   className="remove-bookmark-button"
                   onClick={() => handleRemoveBookmark(messageObj._id)}
