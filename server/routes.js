@@ -8,11 +8,20 @@ const jwt = require('jsonwebtoken');
 const upload = require("./utils/multer");
 const cloudinary = require("./utils/cloudinary");
 const fs = require("fs");
+const rateLimit = require("express-rate-limit");
 require('dotenv').config();
 
 router.use(bodyParser.json());
 
 router.use(express.json());
+
+const limiter = rateLimit({
+  windowMs: 5 * 60 * 1000, 
+  max: 20, 
+  message: "Too many requests from this IP, please try again after 15 minutes",
+});
+
+router.use(limiter);
 
 router.get('/getUsers', async (req, res) => {
     try {
