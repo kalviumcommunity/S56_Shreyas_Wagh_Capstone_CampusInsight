@@ -9,6 +9,8 @@ import Middle from './Components/Middle';
 import Username from './Pages/Username';
 import Profile from './Pages/Profile';
 import BookMarks from './Pages/BookMarks';
+import ForgetPasswordPage from './Pages/ForgetPasswordPage';
+import ResetPasswordPage from './Pages/ResetPasswordPage';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -24,6 +26,8 @@ function App() {
         <Route path="/username" element={<Username />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/bookmarks" element={<BookMarks />} />
+        <Route path="/forgetpassword" element={<ForgetPasswordPage />} />
+        <Route path="/resetpassword" element={<ResetPasswordPage />} />
       </Routes>
     </Router>
     </>

@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 const UserDetails = new mongoose.Schema(
   {
     firstName: String,
@@ -11,6 +10,8 @@ const UserDetails = new mongoose.Schema(
     bookmarkedMessages: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Message" },
     ],
+    otp: { type: String }, 
+    otpExpiration: { type: Date },
   },
   { versionKey: false }
 );

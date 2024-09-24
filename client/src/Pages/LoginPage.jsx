@@ -15,7 +15,7 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/login',
+        'http://localhost:3000/login',
         { email, password }
       );
       if (response && response.data) {
@@ -28,24 +28,31 @@ const LoginPage = () => {
         navigate('/home');
       } else {
         setError('Unexpected response format');
-        console.error('Unexpected response format');
       }
     } catch (error) {
-      if (error.response) {
-        setError(error.response.data.message);
-        console.error('API error:', error.response.data.message);
-      } else if (error.request) {
-        setError('Network error. Please try again later.');
-        console.error('Network error:', error.request);
-      } else {
-        setError('An unexpected error occurred. Please try again later.');
-        console.error('Other error:', error.message);
-      }
+      handleError(error);
+    }
+  };
+
+  const handleError = (error) => {
+    if (error.response) {
+      setError(error.response.data.message);
+      console.error('API error:', error.response.data.message);
+    } else if (error.request) {
+      setError('Network error. Please try again later.');
+      console.error('Network error:', error.request);
+    } else {
+      setError('An unexpected error occurred. Please try again later.');
+      console.error('Other error:', error.message);
     }
   };
 
   const handleSignUpClick = () => {
     navigate('/signup');
+  };
+
+  const handleForgotPassword = () => {
+    navigate('/forgetpassword'); // Directs user to the ForgetPasswordPage
   };
 
   return (
@@ -79,14 +86,27 @@ const LoginPage = () => {
         <button type="submit" className='login'>Log In</button>
       </form>
 
-      <p className="agreement-text">By clicking Log In, you agree to our <u>Terms of Service</u> and <u>Privacy Policy</u></p>
+      <p className="agreement-text">
+        By clicking Log In, you agree to our <u>Terms of Service</u> and <u>Privacy Policy</u>
+      </p>
 
       <p className="left-align1">Join the Conversation</p>
       <p className="left-align2">Sign up to connect with friends, share photos, and be inspired.</p>
 
       {error && <p className="error-message">{error}</p>}
 
-      <p>Don't have an account? <span onClick={handleSignUpClick} style={{ cursor: 'pointer', textDecoration: 'underline' }}>Sign Up</span></p>
+      <p>
+        Don't have an account?{' '}
+        <span onClick={handleSignUpClick} style={{ cursor: 'pointer', textDecoration: 'underline' }}>
+          Sign Up
+        </span>
+      </p>
+      <p>
+        Forgot your password?{' '}
+        <span onClick={handleForgotPassword} style={{ cursor: 'pointer', textDecoration: 'underline' }}>
+          Reset it here
+        </span>
+      </p>
     </div>
   );
 };
