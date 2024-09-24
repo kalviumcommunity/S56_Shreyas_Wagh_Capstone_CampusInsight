@@ -1,18 +1,23 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import Sidebar from "../Sidebar";
 import cookie from "js-cookie";
-import "@testing-library/jest-dom"; // Ensure jest-dom is imported
+import "@testing-library/jest-dom";
 
 jest.mock("js-cookie");
 
 describe("Sidebar component", () => {
   beforeEach(() => {
-    cookie.get.mockReturnValue("testUser"); // Mock username return value
+    cookie.get.mockReturnValue("testUser"); 
     render(
-      <MemoryRouter>
-        <Sidebar />
+      <MemoryRouter initialEntries={["/"]}>
+        <Routes>
+          <Route path="/" element={<Sidebar />} />
+          <Route path="/home" element={<div>Home Page</div>} />
+          <Route path="/bookmarks" element={<div>Bookmarks Page</div>} />
+          <Route path="/profile" element={<div>Profile Page</div>} />
+        </Routes>
       </MemoryRouter>
     );
   });
@@ -25,13 +30,15 @@ describe("Sidebar component", () => {
   test("navigates to home when Home menu item is clicked", () => {
     const homeItem = screen.getByText(/Home/i);
     fireEvent.click(homeItem);
-    // Assert that the navigation occurred (you may need to adapt this)
+
+    expect(screen.getByText(/Home Page/i)).toBeInTheDocument(); // Check if Home Page is rendered
   });
 
   test("navigates to bookmarks when Bookmarks menu item is clicked", () => {
     const bookmarksItem = screen.getByText(/Bookmarks/i);
     fireEvent.click(bookmarksItem);
-    // Assert that the navigation occurred (you may need to adapt this)
+
+    expect(screen.getByText(/Bookmarks Page/i)).toBeInTheDocument(); // Check if Bookmarks Page is rendered
   });
 
   test("logs out and removes cookies when Logout is clicked", () => {
@@ -42,6 +49,10 @@ describe("Sidebar component", () => {
     expect(cookie.remove).toHaveBeenCalledWith("userToken");
     expect(cookie.remove).toHaveBeenCalledWith("userEmail");
     expect(cookie.remove).toHaveBeenCalledWith("username");
-    // You may want to assert navigation as well
+
+    // Ensuring the username is no longer displayed
+    expect(screen.queryByText(/testUser/i)).not.toBeInTheDocument();
+
+    expect(screen.getByText(/Explore/i)).toBeInTheDocument();
   });
 });
