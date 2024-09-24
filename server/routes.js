@@ -9,6 +9,7 @@ const upload = require("./utils/multer");
 const cloudinary = require("./utils/cloudinary");
 const fs = require("fs");
 const rateLimit = require("express-rate-limit");
+const nodemailer = require("nodemailer");
 require('dotenv').config();
 
 router.use(bodyParser.json());
@@ -73,19 +74,21 @@ router.post('/SignUp', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new Details({ firstName, lastName, email, password: hashedPassword });
 
-        await newUser.save();
-        const token = jwt.sign({ email: newUser.email }, process.env.JWT_SECRET);
+    await newUser.save();
+    const token = jwt.sign({ email: newUser.email }, process.env.JWT_SECRET);
 
-        res.status(201).json({ message: 'User signed up successfully', token });
-    } catch (error) {
-        if (error.code === 11000) { 
-            const field = Object.keys(error.keyValue)[0];
-            const message = `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`;
-            return res.status(400).json({ message });
-        }
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+    res.status(201).json({ message: "User signed up successfully", token });
+  } catch (error) {
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyValue)[0];
+      const message = `${
+        field.charAt(0).toUpperCase() + field.slice(1)
+      } already exists`;
+      return res.status(400).json({ message });
     }
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 
@@ -100,11 +103,11 @@ router.post('/SignUp/Username', async (req, res) => {
 
         const existingUserWithUsername = await Details.findOne({ username });
         if (existingUserWithUsername) {
-            return res.status(400).json({ message: 'Username already exists' });
-        }
+      return res.status(400).json({ message: "Username already exists" });
+    }
 
-        user.username = username;
-        await user.save();
+    user.username = username;
+    await user.save();
         res.cookie('username', username, { httpOnly: true });
         res.status(200).json({ message: 'Username added successfully' });
     } catch (error) {
@@ -128,34 +131,39 @@ router.post('/login', async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Invalid password' });
-        }
-
-        const username = user.username;
-        jwt.sign({ email: user.email, username }, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
-            if (err) {
-                console.error('Error signing JWT:', err);
-                return res.status(500).json({ message: 'Error generating token' });
-            }
-            res.status(200).json({ message: 'Login successful', token, username });
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid password" });
     }
+
+    const username = user.username;
+    jwt.sign(
+      { email: user.email, username },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" },
+      (err, token) => {
+        if (err) {
+          console.error("Error signing JWT:", err);
+          return res.status(500).json({ message: "Error generating token" });
+        }
+        res.status(200).json({ message: "Login successful", token, username });
+      }
+    );
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
-router.get('/getMessages', async (req, res) => {
-    try {
-        let result = await message.find({}).sort({ timestamp: -1 });
-        res.json(result);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
+router.get("/getMessages", async (req, res) => {
+  try {
+    let result = await message.find({}).sort({ timestamp: -1 });
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 router.post("/postMessage", upload.single("image"), async (req, res) => {
@@ -190,42 +198,42 @@ router.post("/postMessage", upload.single("image"), async (req, res) => {
       message: messageContent,
       username: username,
       imageUrl: imageUrl, // Add image URL to message if exists
-      imagePublicId: imagePublicId, // Add image public ID for management
+      imagePublicId: imagePublicId, 
     });
 
     // Save to database
     await newMessage.save();
 
-    res
-      .status(201)
-      .json({
-        success: true,
-        message: "Message posted successfully",
-        data: newMessage,
-      });
+    res.status(201).json({
+      success: true,
+      message: "Message posted successfully",
+      data: newMessage,
+    });
   } catch (error) {
     console.error("Error posting message:", error);
     res.status(500).json({ success: false, error: "Failed to post message" });
   }
 });
 
-router.post('/likeMessage', async (req, res) => {
+router.post("/likeMessage", async (req, res) => {
   try {
     const { messageId, username } = req.body;
 
     if (!messageId || !username) {
-      return res.status(400).json({ message: 'Message ID and username are required' });
+      return res
+        .status(400)
+        .json({ message: "Message ID and username are required" });
     }
 
     const msg = await message.findById(messageId);
     const user = await Details.findOne({ username });
 
     if (!msg) {
-      return res.status(404).json({ message: 'Message not found' });
+      return res.status(404).json({ message: "Message not found" });
     }
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     if (!user.likedMessages.includes(messageId)) {
@@ -235,30 +243,32 @@ router.post('/likeMessage', async (req, res) => {
       await msg.save();
     }
 
-    res.status(200).json({ message: 'Likes incremented successfully' });
+    res.status(200).json({ message: "Likes incremented successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
-router.post('/unlikeMessage', async (req, res) => {
+router.post("/unlikeMessage", async (req, res) => {
   try {
     const { messageId, username } = req.body;
 
     if (!messageId || !username) {
-      return res.status(400).json({ message: 'Message ID and username are required' });
+      return res
+        .status(400)
+        .json({ message: "Message ID and username are required" });
     }
 
     const msg = await message.findById(messageId);
     const user = await Details.findOne({ username });
 
     if (!msg) {
-      return res.status(404).json({ message: 'Message not found' });
+      return res.status(404).json({ message: "Message not found" });
     }
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     if (user.likedMessages.includes(messageId)) {
@@ -547,6 +557,89 @@ router.post("/postMessage", upload.single("image"), async (req, res) => {
       success: false,
       error: "An unexpected error occurred. Please try again.",
     });
+  }
+});
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
+
+router.post("/forgetpassword", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await Details.findOne({ email }); // Use the correct user model
+    if (!user) {
+      return res.status(404).send("User not found");
+    } else {
+      const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate 6-digit OTP
+      const otpExpiration = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes from now
+
+      // Store OTP and expiration in the user record
+      user.otp = otp;
+      user.otpExpiration = otpExpiration;
+      await user.save();
+
+      const mailoptions = {
+        from: {
+          name: "AnonymX",
+          address: process.env.EMAIL,
+        },
+        to: email,
+        subject: "OTP for password reset",
+        text: `Your OTP for resetting the password is: ${otp}. This OTP is valid for 10 minutes.`,
+      };
+
+      transporter.sendMail(mailoptions, (err, data) => {
+        if (err) {
+          console.error("Error sending email: ", err);
+          return res.status(500).send("Error sending OTP email");
+        } else {
+          console.log("OTP email sent successfully");
+          return res.status(200).send("OTP sent successfully"); 
+        }
+      });
+    }
+  } catch (err) {
+    console.error("Internal server error: ", err);
+    return res.status(500).send("Internal Server Error");
+  }
+});
+
+// reset password
+router.put("/resetpassword", async (req, res) => {
+  try {
+    const { email, otp, password } = req.body;
+
+    const user = await Details.findOne({ email });
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    // Check if the OTP matches and is still valid
+    if (user.otp === otp && user.otpExpiration > Date.now()) {
+      const hashedPassword = await bcrypt.hash(password, 10); // Hash the new password
+
+      // Reset the OTP and set the new password
+      user.password = hashedPassword;
+      user.otp = null;
+      user.otpExpiration = null;
+
+      await user.save();
+      return res.status(200).send("Password reset successfully");
+    } else {
+      return res.status(400).send("Invalid OTP or OTP expired");
+    }
+  } catch (err) {
+    console.error("Internal server error:", err);
+    return res.status(500).send("Internal Server Error");
   }
 });
 
