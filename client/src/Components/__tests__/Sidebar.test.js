@@ -34,12 +34,12 @@ describe("Sidebar component", () => {
     expect(screen.getByText(/Home Page/i)).toBeInTheDocument(); // Check if Home Page is rendered
   });
 
-  test("navigates to bookmarks when Bookmarks menu item is clicked", () => {
-    const bookmarksItem = screen.getByText(/Bookmarks/i);
-    fireEvent.click(bookmarksItem);
+   test("navigates to bookmarks when Bookmarks menu item is clicked", () => {
+     const bookmarksItem = screen.getByText(/Bookmarks/i);
+     fireEvent.click(bookmarksItem);
 
-    expect(screen.getByText(/Bookmarks Page/i)).toBeInTheDocument(); // Check if Bookmarks Page is rendered
-  });
+     expect(screen.getByText(/Bookmarks Page/i)).toBeInTheDocument(); // Check if Bookmarks Page is rendered
+   });
 
   test("logs out and removes cookies when Logout is clicked", () => {
     const logoutItem = screen.getByText(/Logout/i);
