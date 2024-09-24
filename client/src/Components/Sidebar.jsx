@@ -19,6 +19,7 @@ const Sidebar = () => {
     cookie.remove('userToken');
     cookie.remove('userEmail');
     cookie.remove('username');
+    setUsername(''); 
     navigate('/');
   };
 

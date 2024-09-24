@@ -4,19 +4,19 @@ import './Styles/Footer.css';
 function Footer() {
   return (
     <footer className="footer">
-        <MountainIcon />
-        <p id='brief'>
-            Anonymously share college experiences, reviews, discussions. Upvote, downvote
-            , search, and verify email domains for genuine users.
-        </p>
+      <MountainIcon />
+      <p id='brief'>
+        Anonymously share college experiences, reviews, discussions. Upvote, downvote,
+        search, and verify email domains for genuine users.
+      </p>
       <nav>
         <div>
-        <ul>
-        <li><a href="#">Terms</a></li> 
-        <li><a href="#">Privacy</a></li> 
-        <li><a href="#">Compliance</a></li> 
-        <li><a href="#">Contact</a></li> 
-        </ul>
+          <ul>
+            <li><a href="#">Terms</a></li> 
+            <li><a href="#">Privacy</a></li> 
+            <li><a href="#">Compliance</a></li> 
+            <li><a href="#">Contact</a></li> 
+          </ul>
         </div>
       </nav>
       <p className='email'>AnonymS@gmail.com</p>
@@ -28,6 +28,7 @@ function Footer() {
 function MountainIcon(props) {
   return (
     <svg
+      data-testid="mountain-icon" // Add data-testid for testing
       width="24"
       height="24"
       fill=""
@@ -37,4 +38,5 @@ function MountainIcon(props) {
     </svg>
   );
 }
+
 export default Footer;
