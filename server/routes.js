@@ -575,41 +575,51 @@ router.post("/forgetpassword", async (req, res) => {
   try {
     const { email } = req.body;
 
-    const user = await Details.findOne({ email }); // Use the correct user model
-    if (!user) {
-      return res.status(404).send("User not found");
-    } else {
-      const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate 6-digit OTP
-      const otpExpiration = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes from now
-
-      // Store OTP and expiration in the user record
-      user.otp = otp;
-      user.otpExpiration = otpExpiration;
-      await user.save();
-
-      const mailoptions = {
-        from: {
-          name: "AnonymX",
-          address: process.env.EMAIL,
-        },
-        to: email,
-        subject: "OTP for password reset",
-        text: `Your OTP for resetting the password is: ${otp}. This OTP is valid for 10 minutes.`,
-      };
-
-      transporter.sendMail(mailoptions, (err, data) => {
-        if (err) {
-          console.error("Error sending email: ", err);
-          return res.status(500).send("Error sending OTP email");
-        } else {
-          console.log("OTP email sent successfully");
-          return res.status(200).send("OTP sent successfully"); 
-        }
-      });
+    // Check if email is provided
+    if (!email) {
+      return res.status(400).json({ error: "Email is required" });
     }
+
+    // Find user by email
+    const user = await Details.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Generate OTP and set expiration time
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiration = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    // Store OTP and expiration in user document
+    user.otp = otp;
+    user.otpExpiration = otpExpiration;
+    await user.save();
+
+    const mailOptions = {
+      from: {
+        name: "AnonymX",
+        address: process.env.EMAIL,
+      },
+      to: email,
+      subject: "OTP for password reset",
+      text: `Your OTP for resetting the password is: ${otp}. This OTP is valid for 10 minutes.`,
+    };
+
+    // Send the OTP email
+    transporter.sendMail(mailOptions, (err, data) => {
+      if (err) {
+        console.error("Error sending OTP email:", err);
+        return res.status(500).json({ error: "Error sending OTP email" });
+      }
+
+      console.log("OTP email sent successfully");
+      return res.status(200).json({ message: "OTP sent successfully" });
+    });
   } catch (err) {
-    console.error("Internal server error: ", err);
-    return res.status(500).send("Internal Server Error");
+    console.error("Internal server error:", err);
+    return res
+      .status(500)
+      .json({ error: "Internal Server Error. Please try again later." });
   }
 });
 
@@ -618,28 +628,45 @@ router.put("/resetpassword", async (req, res) => {
   try {
     const { email, otp, password } = req.body;
 
+    // Validate inputs
+    if (!email || !otp || !password) {
+      return res
+        .status(400)
+        .json({ error: "Email, OTP, and new password are required" });
+    }
+
+    // Find user by email
     const user = await Details.findOne({ email });
     if (!user) {
-      return res.status(404).send("User not found");
+      return res.status(404).json({ error: "User not found" });
     }
 
-    // Check if the OTP matches and is still valid
-    if (user.otp === otp && user.otpExpiration > Date.now()) {
-      const hashedPassword = await bcrypt.hash(password, 10); // Hash the new password
-
-      // Reset the OTP and set the new password
-      user.password = hashedPassword;
-      user.otp = null;
-      user.otpExpiration = null;
-
-      await user.save();
-      return res.status(200).send("Password reset successfully");
-    } else {
-      return res.status(400).send("Invalid OTP or OTP expired");
+    // Validate OTP
+    if (user.otp !== otp) {
+      return res.status(400).json({ error: "Invalid OTP" });
     }
+
+    // Check OTP expiration
+    if (user.otpExpiration <= Date.now()) {
+      return res.status(400).json({ error: "OTP expired" });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Reset password, OTP, and OTP expiration
+    user.password = hashedPassword;
+    user.otp = null;
+    user.otpExpiration = null;
+
+    await user.save();
+
+    return res.status(200).json({ message: "Password reset successfully" });
   } catch (err) {
     console.error("Internal server error:", err);
-    return res.status(500).send("Internal Server Error");
+    return res
+      .status(500)
+      .json({ error: "Internal Server Error. Please try again later." });
   }
 });
 
