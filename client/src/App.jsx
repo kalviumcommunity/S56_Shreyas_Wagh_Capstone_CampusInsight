@@ -11,6 +11,7 @@ import Profile from './Pages/Profile';
 import BookMarks from './Pages/BookMarks';
 import ForgetPasswordPage from './Pages/ForgetPasswordPage';
 import ResetPasswordPage from './Pages/ResetPasswordPage';
+import AboutUs from './Pages/AboutUs';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -28,6 +29,7 @@ function App() {
         <Route path="/bookmarks" element={<BookMarks />} />
         <Route path="/forgetpassword" element={<ForgetPasswordPage />} />
         <Route path="/resetpassword" element={<ResetPasswordPage />} />
+        <Route path="/aboutus" element={<AboutUs />} />
       </Routes>
     </Router>
     </>
