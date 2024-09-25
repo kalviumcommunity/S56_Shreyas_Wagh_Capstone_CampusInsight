@@ -17,7 +17,7 @@ function Navbar() {
       </div>
       <nav className="navbar-nav">
         <span>Home</span>
-        <span>About</span>
+        <Link to="/aboutus"><span>About</span></Link>
         <span>Features</span>
         <span>Blog</span>
         <span>Contact</span>

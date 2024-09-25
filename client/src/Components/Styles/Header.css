@@ -1,0 +1,31 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #fff;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+}
+
+.header-nav {
+    display: flex;
+    gap: 20px;
+}
+
+.header-nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+.header-get-started .get-started-btn {
+    background-color: #000;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+}
