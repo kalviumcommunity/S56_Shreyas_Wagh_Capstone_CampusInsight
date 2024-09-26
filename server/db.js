@@ -15,7 +15,7 @@ const loadEnv = async () => {
 let connected = async () => {
   await loadEnv();
   try {
-    console.log(process.env.database_URI);
+    console.log("Connecting to the database...");
     await mongoose.connect(process.env.database_URI);
     console.log("Database connected successfully");
     scheduleCronJobs();
@@ -29,25 +29,29 @@ const isConnected = () => {
 };
 
 const scheduleCronJobs = () => {
+  // Run every minute
   cron.schedule("* * * * *", () => {
-    console.log("Running a task every minute");
-  });
-
-  cron.schedule("0 0 * * *", () => {
-    console.log("Running a daily task at midnight");
+    try {
+      console.log("Running a task every minute");
+    } catch (error) {
+      console.error("Error in every-minute cron job:", error);
+    }
   });
 
   cron.schedule("0 0 * * *", async () => {
     try {
+      console.log("Running daily tasks at midnight");
+      console.log("Running a daily task at midnight");
+
+      // Task 2: Deleting old OTP records
       console.log("Running cron job to delete old OTP records");
       const result = await Details.updateMany(
-        { otpExpiration: { $lt: new Date() } }, 
-        { $unset: { otp: "", otpExpiration: "" } } 
+        { otpExpiration: { $lt: new Date() } }, // Find expired OTPs
+        { $unset: { otp: "", otpExpiration: "" } } // Remove fields
       );
-
       console.log(`Cleared OTPs from ${result.modifiedCount} user records`);
     } catch (error) {
-      console.error("Error running cron job:", error);
+      console.error("Error in daily midnight cron job:", error);
     }
   });
 };
