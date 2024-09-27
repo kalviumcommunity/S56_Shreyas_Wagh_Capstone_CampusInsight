@@ -1,0 +1,22 @@
+.footer {
+    background-color: #f1f1f1;
+    padding: 20px;
+    text-align: center;
+}
+
+.footer p {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.footer-links span {
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: underline;
+}
