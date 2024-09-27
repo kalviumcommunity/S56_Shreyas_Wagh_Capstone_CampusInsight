@@ -20,7 +20,7 @@ const Sidebar = () => {
     cookie.remove('userEmail');
     cookie.remove('username');
     setUsername(''); 
-    navigate('/');
+    navigate('/'); // Navigate to the login or landing page
   };
 
   const toggleModal = () => {
@@ -39,6 +39,10 @@ const Sidebar = () => {
     navigate('/bookmarks'); // Navigate to the Bookmarks Page
   };
 
+  const handleMessagesClick = () => {
+    navigate('/messages'); // Navigate to the Messages Page
+  };
+
   return (
     <div className="sidebar">
       <div className="sidebar-header">
@@ -55,7 +59,7 @@ const Sidebar = () => {
         <li className="sidebar-menu-item">
           <span>Notifications</span>
         </li>
-        <li className="sidebar-menu-item">
+        <li className="sidebar-menu-item" onClick={handleMessagesClick}>
           <span>Messages</span>
         </li>
         <li className="sidebar-menu-item" onClick={handleBookmarksClick}>

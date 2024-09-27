@@ -670,5 +670,106 @@ router.put("/resetpassword", async (req, res) => {
   }
 });
 
+router.get("/userMessages/:email", async (req, res) => {
+  try {
+    const email = req.params.email;
+    const user = await Details.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const userMessages = await message
+      .find({ username: user.username })
+      .sort({ timestamp: -1 });
+
+    res.status(200).json({ messages: userMessages });
+  } catch (error) {
+    console.error(
+      "Error fetching user messages for email:",
+      req.params.email,
+      error
+    );
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+});
+
+router.delete("/deleteMessage/:messageId", async (req, res) => {
+  try {
+    const messageId = req.params.messageId;
+    const userEmail = req.body.email;
+
+    const messageToDelete = await message.findById(messageId);
+    if (!messageToDelete) {
+      return res.status(404).json({ message: "Message not found" });
+    }
+
+    const user = await Details.findOne({ email: userEmail });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (messageToDelete.username !== user.username) {
+      return res
+        .status(403)
+        .json({ message: "User not authorized to delete this message" });
+    }
+
+    await message.findByIdAndDelete(messageId);
+    res.status(200).json({ message: "Message deleted successfully" });
+  } catch (error) {
+    console.error(
+      "Error deleting message with ID:",
+      req.params.messageId,
+      error
+    );
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+});
+
+router.put("/messages/:id", upload.single("image"), async (req, res) => {
+  const { id } = req.params;
+  const { message: newMessage, email } = req.body || {};
+
+  if (!newMessage) {
+    return res.status(400).send({ error: "Message field is required." });
+  }
+
+  try {
+    let imageUrl = null;
+    let imagePublicId = null;
+
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      imageUrl = result.secure_url;
+      imagePublicId = result.public_id;
+      fs.unlinkSync(req.file.path);
+    }
+
+    const updatedMessage = await message.findByIdAndUpdate(
+      id,
+      {
+        message: newMessage,
+        imageUrl: imageUrl || req.body.imageUrl,
+        imagePublicId: imagePublicId || req.body.imagePublicId,
+      },
+      { new: true }
+    );
+
+    if (!updatedMessage) {
+      return res.status(404).send({ error: "Message not found" });
+    }
+
+    res.send(updatedMessage);
+  } catch (error) {
+    console.error("Error updating message with ID:", id, error);
+    res
+      .status(500)
+      .send({ error: "Internal server error", error: error.message });
+  }
+});
+
 module.exports = router;
      
