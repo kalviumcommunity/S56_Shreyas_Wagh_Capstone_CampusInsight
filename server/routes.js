@@ -677,14 +677,21 @@ router.get("/userMessages/:email", async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+
     const userMessages = await message
       .find({ username: user.username })
       .sort({ timestamp: -1 });
 
     res.status(200).json({ messages: userMessages });
   } catch (error) {
-    console.error("Error fetching user messages:", error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error(
+      "Error fetching user messages for email:",
+      req.params.email,
+      error
+    );
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 });
 
@@ -692,21 +699,33 @@ router.delete("/deleteMessage/:messageId", async (req, res) => {
   try {
     const messageId = req.params.messageId;
     const userEmail = req.body.email;
+
     const messageToDelete = await message.findById(messageId);
     if (!messageToDelete) {
       return res.status(404).json({ message: "Message not found" });
     }
+
     const user = await Details.findOne({ email: userEmail });
-    if (!user || messageToDelete.username !== user.username) {
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (messageToDelete.username !== user.username) {
       return res
         .status(403)
         .json({ message: "User not authorized to delete this message" });
     }
+
     await message.findByIdAndDelete(messageId);
     res.status(200).json({ message: "Message deleted successfully" });
   } catch (error) {
-    console.error("Error deleting message:", error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error(
+      "Error deleting message with ID:",
+      req.params.messageId,
+      error
+    );
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 });
 
@@ -733,7 +752,7 @@ router.put("/messages/:id", upload.single("image"), async (req, res) => {
       id,
       {
         message: newMessage,
-        imageUrl: imageUrl || req.body.imageUrl, 
+        imageUrl: imageUrl || req.body.imageUrl,
         imagePublicId: imagePublicId || req.body.imagePublicId,
       },
       { new: true }
@@ -745,8 +764,10 @@ router.put("/messages/:id", upload.single("image"), async (req, res) => {
 
     res.send(updatedMessage);
   } catch (error) {
-    console.error("Error updating message:", error.message);
-    res.status(500).send({ error: "Internal server error" });
+    console.error("Error updating message with ID:", id, error);
+    res
+      .status(500)
+      .send({ error: "Internal server error", error: error.message });
   }
 });
 
