@@ -19,11 +19,11 @@ const LoginPage = () => {
         { email, password }
       );
       if (response && response.data) {
-        const token = response.data.token;
-        cookie.set('userToken', token);
-        cookie.set('userEmail', email);
-        const username = response.data.username;
-        cookie.set('username', username);
+         const { token, userId, username } = response.data; 
+        cookie.set('userToken', token);        
+        cookie.set('userEmail', email);         
+        cookie.set('username', username);       
+        cookie.set('userId', userId);          
         console.log('Login successful. Token:', token);
         navigate('/home');
       } else {

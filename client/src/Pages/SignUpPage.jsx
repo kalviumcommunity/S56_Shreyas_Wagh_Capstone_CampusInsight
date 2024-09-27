@@ -31,6 +31,7 @@ const SignUpPage = () => {
         console.log('Response from server:', response.data);
         cookie.set('userToken', response.data.token);
         cookie.set('userEmail', email); 
+        cookie.set('userId', response.data.userId); 
         setFirstName('');
         setLastName('');
         setEmail('');

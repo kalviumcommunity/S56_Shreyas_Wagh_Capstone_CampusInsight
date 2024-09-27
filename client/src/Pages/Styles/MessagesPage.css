@@ -1,0 +1,64 @@
+/* General container styling */
+.messages-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f5f8fa;
+}
+
+/* Individual message card styling */
+.message-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 60%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.message-header strong {
+    font-size: 1.2rem;
+}
+
+.message-body {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #333;
+}
+
+.message-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.message-button {
+    background-color: #e0245e;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.message-button:hover {
+    background-color: #c81e50;
+}
+
+/* Like and timestamp styling */
+.message-likes,
+.message-timestamp {
+    font-size: 0.9rem;
+    color: #657786;
+}
