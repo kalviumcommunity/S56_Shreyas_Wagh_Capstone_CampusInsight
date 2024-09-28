@@ -7,7 +7,7 @@ const resolvers = {
     user: async (_, { id, username }) => {
       if (id) return await Details.findById(id);
       if (username) return await Details.findOne({ username });
-      throw new Error("Please provide either id or username");
+      throw new Error("Error fetching users");
     },
     messages: async () => await message.find(),
     message: async (_, { id }) => await message.findById(id),

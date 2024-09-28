@@ -6,6 +6,8 @@ const { ApolloServer } = require("apollo-server-express");
 const typeDefs = require("./graphql/schema");
 const resolvers = require("./graphql/resolvers");
 const express = require("express"); // Import Express
+const { PubSub } = require("graphql-subscriptions");
+const pubsub = new PubSub();
 
 const app = express(); // Create an Express application
 
