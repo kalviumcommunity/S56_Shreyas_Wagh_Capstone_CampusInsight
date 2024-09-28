@@ -30,6 +30,30 @@ const resolvers = {
       const newMessage = new message({ message: msg, username });
       return await newMessage.save();
     },
+    updateUser: async (_, { id, firstName, lastName, email, username }) => {
+      const updatedUser = await Details.findByIdAndUpdate(
+        id,
+        { firstName, lastName, email, username },
+        { new: true }
+      );
+      return updatedUser;
+    },
+    deleteUser: async (_, { id }) => {
+      const deletedUser = await Details.findByIdAndDelete(id);
+      return deletedUser;
+    },
+    updateMessage: async (_, { id, message: msg }) => {
+      const updatedMessage = await message.findByIdAndUpdate(
+        id,
+        { message: msg },
+        { new: true }
+      );
+      return updatedMessage;
+    },
+    deleteMessage: async (_, { id }) => {
+      const deletedMessage = await message.findByIdAndDelete(id);
+      return deletedMessage;
+    },
   },
 };
 

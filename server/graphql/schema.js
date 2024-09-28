@@ -38,6 +38,16 @@ const typeDefs = gql`
       username: String!
     ): User
     createMessage(message: String!, username: String!): Message
+    updateUser(
+      id: ID!
+      firstName: String
+      lastName: String
+      email: String
+      username: String
+    ): User
+    deleteUser(id: ID!): User
+    updateMessage(id: ID!, message: String!): Message
+    deleteMessage(id: ID!): Message
   }
 `;
 
