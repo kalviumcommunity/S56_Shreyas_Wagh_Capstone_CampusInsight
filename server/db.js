@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cron = require("node-cron");
 const { Details } = require("./models/Users.js");
+const { ApolloServer } = require("apollo-server-express");
+const typeDefs = require("./graphql/schema");
+const resolvers = require("./graphql/resolvers");
+const express = require("express"); // Import Express
+
+const app = express(); // Create an Express application
 
 const loadEnv = async () => {
   try {
@@ -19,6 +25,19 @@ let connected = async () => {
     await mongoose.connect(process.env.database_URI);
     console.log("Database connected successfully");
     scheduleCronJobs();
+
+    // Apollo Server setup
+    const server = new ApolloServer({ typeDefs, resolvers });
+    await server.start();
+    server.applyMiddleware({ app });
+
+    // Start the Express server
+    const PORT = process.env.PORT || 4000;
+    app.listen(PORT, () => {
+      console.log(
+        `Server running at http://localhost:${PORT}${server.graphqlPath}`
+      );
+    });
   } catch (error) {
     console.error("Error connecting to the database:", error);
   }
