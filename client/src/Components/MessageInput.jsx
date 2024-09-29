@@ -4,29 +4,29 @@ import './Styles/MessageInput.css';
 
 const MessageInput = ({ onNewMessage, username }) => {
   const [message, setMessage] = useState('');
-  const [image, setImage] = useState(null); // State for storing the uploaded image
+  const [image, setImage] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!message.trim() && !image) return; // Ensure there's either a message or an image
+    if (!message.trim() && !image) return;
 
-    const formData = new FormData(); // Create a new FormData object to hold the data
-    formData.append('message', message); // Append the message text
-    formData.append('username', username); // Append the username
+    const formData = new FormData(); 
+    formData.append('message', message); 
+    formData.append('username', username); 
     if (image) {
-      formData.append('image', image); // Append the image file if uploaded
+      formData.append('image', image); 
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/postMessage', formData, {
+      const response = await axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/postMessage', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data', // Set the content type for file upload
+          'Content-Type': 'multipart/form-data', 
         },
       });
-      setMessage(''); // Clear the message input
-      setImage(null); // Clear the image input
+      setMessage('');
+      setImage(null); 
       if (onNewMessage) {
-        onNewMessage(response.data); // Optionally trigger any callback after successful post
+        onNewMessage(response.data); 
       }
     } catch (error) {
       console.error('Error posting message:', error);
@@ -34,7 +34,7 @@ const MessageInput = ({ onNewMessage, username }) => {
   };
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]); // Update image state when a file is selected
+    setImage(e.target.files[0]); 
   };
 
   return (

@@ -8,8 +8,7 @@ const PostModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // handle the post submission logic here
-    onClose(); // close the modal after submission
+    onClose();
   };
 
   return (

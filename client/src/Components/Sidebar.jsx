@@ -20,7 +20,7 @@ const Sidebar = () => {
     cookie.remove('userEmail');
     cookie.remove('username');
     setUsername(''); 
-    navigate('/'); // Navigate to the login or landing page
+    navigate('/'); 
   };
 
   const toggleModal = () => {

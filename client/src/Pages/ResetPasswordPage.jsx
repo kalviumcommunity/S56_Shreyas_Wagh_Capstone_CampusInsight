@@ -14,7 +14,7 @@ const ResetPasswordPage = () => {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put('http://localhost:3000/resetpassword', { email, otp, password: newPassword });
+      const response = await axios.put('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/resetpassword', { email, otp, password: newPassword });
       if (response.status === 200) {
         setSuccess(true);
         console.log('Password reset successfully');

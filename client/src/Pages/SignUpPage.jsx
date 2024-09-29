@@ -65,8 +65,8 @@ const SignUpPage = () => {
 
   return (
     <div id='SignUp'>
-      <MountainIcon />
       <h2>Sign Up</h2>
+      <MountainIcon />
       <p className='info'>Enter your information to create an account</p>
       <form onSubmit={handleSubmit}>
         <div className="label-input-container">
