@@ -11,7 +11,7 @@ const ForgetPasswordPage = () => {
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/forgetpassword', { email });
+      const response = await axios.post('http://localhost:3000/forgetpassword', { email });
       if (response.status === 200) {
         console.log('OTP sent successfully');
         navigate('/resetpassword');

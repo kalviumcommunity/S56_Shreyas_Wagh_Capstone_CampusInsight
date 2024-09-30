@@ -5,7 +5,7 @@ const UserDetails = new mongoose.Schema(
     lastName: String,
     email: { type: String, unique: true, required: true },
     password: String,
-    username: { type: String, unique: true, required: true },
+    username: { type: String},
     likedMessages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
     bookmarkedMessages: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Message" },

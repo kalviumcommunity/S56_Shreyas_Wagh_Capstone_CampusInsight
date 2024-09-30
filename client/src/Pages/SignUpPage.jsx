@@ -26,7 +26,7 @@ const SignUpPage = () => {
       password: password
     };
     axios.post(
-      'https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/SignUp', formData)
+      'http://localhost:3000/SignUp', formData)
       .then(response => {
         console.log('Response from server:', response.data);
         cookie.set('userToken', response.data.token);

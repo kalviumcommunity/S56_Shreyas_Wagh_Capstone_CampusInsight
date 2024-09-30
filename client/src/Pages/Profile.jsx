@@ -20,7 +20,7 @@ function ProfilePage() {
         }
 
         // Fetch user details based on the email
-        axios.get(`https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/getUserByEmail/${userEmail}`)
+        axios.get(`http://localhost:3000/getUserByEmail/${userEmail}`)
             .then(response => {
                 setUser(response.data);
                 setFirstName(response.data.firstName); // Initialize with current data
@@ -60,7 +60,7 @@ function ProfilePage() {
         }
 
         // If validation passes, send the PUT request
-        axios.put(`https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/updateUser/${user._id}`, {
+        axios.put(`http://localhost:3000/updateUser/${user._id}`, {
             firstName,
             lastName
         })
