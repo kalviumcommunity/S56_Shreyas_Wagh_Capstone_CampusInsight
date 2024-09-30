@@ -63,7 +63,7 @@ const ChatPage = () => {
       >
         {chatMessages.map((msg, index) => (
           <div key={index}>
-            <strong>{isSentByUser(msg) ? "You" : msg.username}: </strong>
+            {/* <strong>{isSentByUser(msg) ? "You" : msg.username}: </strong> */}
             <span>{msg.message}</span>
           </div>
         ))}

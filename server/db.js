@@ -19,11 +19,19 @@ app.use(cookieParser()); // Add cookie-parser to extract cookies
 const server = http.createServer(app); // Create an HTTP server for Socket.io
 
 // Initialize Socket.io
+const allowedOrigins = [
+  "https://client-blush-five.vercel.app", // Your production origin
+  "http://localhost:5173", // Your local development origin
+];
+
 const io = new Server(server, {
   cors: {
-    origin: "*", // Allow all origins for now (can be restricted later)
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
+    credentials: true, // Include credentials if needed
   },
 });
+
 
 const loadEnv = async () => {
   try {
