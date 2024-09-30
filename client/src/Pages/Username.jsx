@@ -19,7 +19,7 @@ const Username = () => {
         username: username
       };
       try {
-        const response = await axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/SignUp/Username', formData);
+        const response = await axios.post('http://localhost:3000/SignUp/Username', formData);
         console.log('Response from server:', response.data);
         cookie.set('username', username);
         navigate('/home');

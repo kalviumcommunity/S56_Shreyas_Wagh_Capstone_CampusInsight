@@ -13,6 +13,7 @@ import ForgetPasswordPage from './Pages/ForgetPasswordPage';
 import ResetPasswordPage from './Pages/ResetPasswordPage';
 import AboutUs from './Pages/AboutUs';
 import MessagesPage from './Pages/MessagesPage';
+import ChatPage from "./Pages/ChatPage";
 
 function App() {
   const [count, setCount] = useState(0)
@@ -32,6 +33,7 @@ function App() {
         <Route path="/resetpassword" element={<ResetPasswordPage />} />
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/messages" element={<MessagesPage />} />
+        <Route path="/chat" element={<ChatPage />} />
       </Routes>
     </Router>
     </>

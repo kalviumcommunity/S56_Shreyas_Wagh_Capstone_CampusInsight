@@ -15,7 +15,7 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/login',
+        'http://localhost:3000/login',
         { email, password }
       );
       if (response && response.data) {
