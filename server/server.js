@@ -9,6 +9,7 @@ const dotenv = require('dotenv');
 app.use(cors());
 app.use(express.json())
 
+app.set("trust proxy", 1); 
 
 app.get('/', (req, res) => {
      try {

@@ -29,7 +29,7 @@
     "graphql": "^16.9.0",
     "graphql-subscriptions": "^2.0.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.2.4",
+    "mongoose": "^8.7.0",
     "multer": "^1.4.5-lts.1",
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.15",
@@ -38,6 +38,7 @@
     "passport-google-oauth20": "^2.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "redis": "^4.7.0"
+    "redis": "^4.7.0",
+    "socket.io": "^4.8.0"
   }
 }
