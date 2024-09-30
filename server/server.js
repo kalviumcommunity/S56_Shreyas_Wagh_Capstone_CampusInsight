@@ -6,7 +6,14 @@ const app = express()
 const port = process.env.PORT||3000
 const dotenv = require('dotenv');
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://client-blush-five.vercel.app", 
+    methods: ["GET", "POST", "PUT", "DELETE"], 
+    credentials: true, 
+  })
+);
+
 app.use(express.json())
 
 app.set("trust proxy", true); 
