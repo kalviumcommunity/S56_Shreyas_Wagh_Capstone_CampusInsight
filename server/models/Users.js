@@ -17,7 +17,6 @@ const UserDetails = new mongoose.Schema(
 );
 
 UserDetails.index({ email: 1 }, { unique: true });
-UserDetails.index({ username: 1 }, { unique: true });
 
 const Details = mongoose.model("user", UserDetails);
 
