@@ -29,12 +29,18 @@ let connected = async () => {
     scheduleCronJobs();
 
     // Apollo Server setup
-    const server = new ApolloServer({ typeDefs, resolvers });
+    const server = new ApolloServer({
+      typeDefs,
+      resolvers,
+      persistedQueries: true,
+      cache: "bounded", // Set cache to bounded
+    });
+
     await server.start();
     server.applyMiddleware({ app });
 
     // Start the Express server
-    const PORT = process.env.PORT || 4000;
+    const PORT = process.env.PORT || 4001;
     app.listen(PORT, () => {
       console.log(
         `Server running at http://localhost:${PORT}${server.graphqlPath}`
