@@ -17,7 +17,7 @@ const BookMarks = () => {
   }, [username]);
 
   const fetchBookmarkedMessages = () => {
-    fetch(`http://localhost:3000/bookmarkedMessages?username=${username}`)
+    fetch(`https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/bookmarkedMessages?username=${username}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -40,7 +40,7 @@ const BookMarks = () => {
 
   // Handle removing bookmark
   const handleRemoveBookmark = (messageId) => {
-    fetch('http://localhost:3000/removeBookmark', {
+    fetch('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/removeBookmark', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

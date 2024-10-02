@@ -18,7 +18,7 @@ const MessageInput = ({ onNewMessage, username }) => {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/postMessage', formData, {
+      const response = await axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/postMessage', formData, {
         headers: {
           'Content-Type': 'multipart/form-data', 
         },
