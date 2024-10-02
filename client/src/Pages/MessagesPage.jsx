@@ -24,7 +24,7 @@ const MessagesPage = () => {
 
     const fetchMessages = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/userMessages/${userEmail}`);
+        const response = await axios.get(`https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/userMessages/${userEmail}`);
         setMessages(response.data.messages); 
         setLoading(false);
       } catch (err) {
@@ -39,7 +39,7 @@ const MessagesPage = () => {
 
   const handleDelete = async (messageId) => {
     try {
-      await axios.delete(`http://localhost:3000/deleteMessage/${messageId}`, {
+      await axios.delete(`https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/deleteMessage/${messageId}`, {
         data: { email: userEmail }, 
       });
       setMessages(messages.filter((message) => message._id !== messageId));
@@ -65,7 +65,7 @@ const MessagesPage = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:3000/messages/${messageId}`,
+        `https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/messages/${messageId}`,
         formData,
         {
           headers: {

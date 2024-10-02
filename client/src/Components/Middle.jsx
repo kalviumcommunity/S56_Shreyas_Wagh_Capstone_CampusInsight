@@ -39,7 +39,7 @@ const Middle = ({ messages }) => {
 
     const fetchLikedMessages = async (username) => {
       try {
-        const response = await axios.get(`http://localhost:3000/likedMessages?username=${username}`);
+        const response = await axios.get(`https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/likedMessages?username=${username}`);
         setLikedMessages(response.data.likedMessages);
       } catch (error) {
         console.error('Error fetching liked messages:', error);
@@ -48,7 +48,7 @@ const Middle = ({ messages }) => {
 
     const fetchBookmarkedMessages = async (username) => {
       try {
-        const response = await axios.get(`http://localhost:3000/bookmarkedMessages?username=${username}`);
+        const response = await axios.get(`https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/bookmarkedMessages?username=${username}`);
         setBookmarkedMessages(response.data.bookmarkedMessages);
       } catch (error) {
         console.error('Error fetching bookmarked messages:', error);
@@ -65,7 +65,7 @@ const Middle = ({ messages }) => {
   const handleLike = async (messageId) => {
     try {
       if (!likedMessages.includes(messageId)) {
-        await axios.post('http://localhost:3000/likeMessage', { messageId, username });
+        await axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/likeMessage', { messageId, username });
         setLikedMessages([...likedMessages, messageId]);
         setUpdatedMessages(prevMessages =>
           prevMessages.map(msg =>
@@ -81,7 +81,7 @@ const Middle = ({ messages }) => {
   const handleUnlike = async (messageId) => {
     try {
       if (likedMessages.includes(messageId)) {
-        await axios.post('http://localhost:3000/unlikeMessage', { messageId, username });
+        await axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/unlikeMessage', { messageId, username });
         setLikedMessages(likedMessages.filter(id => id !== messageId));
         setUpdatedMessages(prevMessages =>
           prevMessages.map(msg =>
@@ -97,7 +97,7 @@ const Middle = ({ messages }) => {
   const handleBookmark = async (messageId) => {
     try {
       if (!bookmarkedMessages.includes(messageId)) {
-        await axios.post('http://localhost:3000/bookmarkMessage', { messageId, username });
+        await axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/bookmarkMessage', { messageId, username });
         setBookmarkedMessages([...bookmarkedMessages, messageId]);
       }
     } catch (error) {
@@ -108,7 +108,7 @@ const Middle = ({ messages }) => {
   const handleUnbookmark = async (messageId) => {
     try {
       if (bookmarkedMessages.includes(messageId)) {
-        await axios.post('http://localhost:3000/unbookmarkMessage', { messageId, username });
+        await axios.post('https://s56-shreyas-wagh-capstone-campusinsight.onrender.com/unbookmarkMessage', { messageId, username });
         setBookmarkedMessages(bookmarkedMessages.filter(id => id !== messageId));
       }
     } catch (error) {
