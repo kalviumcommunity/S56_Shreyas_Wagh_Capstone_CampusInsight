@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import io from "socket.io-client";
 import Cookies from "js-cookie"; // Import js-cookie
 
-const SOCKET_SERVER_URL = "http://localhost:3000";
+const SOCKET_SERVER_URL = "http://localhost:4000";
 
 const ChatPage = () => {
   const [socket, setSocket] = useState(null);
