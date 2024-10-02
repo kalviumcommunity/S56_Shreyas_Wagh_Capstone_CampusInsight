@@ -3,15 +3,10 @@ const dotenv = require("dotenv");
 const cron = require("node-cron");
 const { Details } = require("./models/Users.js");
 const { ChatMessage } = require("./models/ChatMessage.js"); // Use ChatMessage model instead of "message"
-const { ApolloServer } = require("apollo-server-express");
-const typeDefs = require("./graphql/schema");
-const resolvers = require("./graphql/resolvers");
 const express = require("express"); // Import Express
 const http = require("http"); // Needed for Socket.io
 const { Server } = require("socket.io"); // Import Socket.io
 const cookieParser = require("cookie-parser"); // Import cookie-parser to handle cookies
-const { PubSub } = require("graphql-subscriptions");
-const pubsub = new PubSub();
 
 // Create an Express application
 const app = express();
@@ -32,7 +27,6 @@ const io = new Server(server, {
   },
 });
 
-
 const loadEnv = async () => {
   try {
     await dotenv.config();
@@ -49,15 +43,6 @@ let connected = async () => {
     await mongoose.connect(process.env.database_URI);
     console.log("Database connected successfully");
     scheduleCronJobs();
-
-    // Apollo Server setup
-      const apolloServer = new ApolloServer({
-        typeDefs,
-        resolvers,
-        persistedQueries: false, // Disable persisted queries
-      });
-    await apolloServer.start();
-    apolloServer.applyMiddleware({ app });
 
     // Start listening to the Socket.io connections
     io.on("connection", (socket) => {
@@ -83,12 +68,10 @@ let connected = async () => {
       });
     });
 
-    // Start the Express server with Socket.io and Apollo Server
-    const PORT = process.env.PORT || 10000;
+    // Start the Express server with Socket.io
+    const PORT = process.env.PORT || 4000; // Use 3000 for both
     server.listen(PORT, () => {
-      console.log(
-        `Server running at http://localhost:${PORT}${apolloServer.graphqlPath}`
-      );
+      console.log(`Server running at http://localhost:${PORT}`);
     });
   } catch (error) {
     console.error("Error connecting to the database:", error);
