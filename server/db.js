@@ -1,17 +1,11 @@
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const cron = require("node-cron");
 const { Details } = require("./models/Users.js");
 const { ChatMessage } = require("./models/ChatMessage.js"); // Use ChatMessage model instead of "message"
-const { ApolloServer } = require("apollo-server-express");
-const typeDefs = require("./graphql/schema");
-const resolvers = require("./graphql/resolvers");
 const express = require("express"); // Import Express
 const http = require("http"); // Needed for Socket.io
 const { Server } = require("socket.io"); // Import Socket.io
 const cookieParser = require("cookie-parser"); // Import cookie-parser to handle cookies
-const { PubSub } = require("graphql-subscriptions");
-const pubsub = new PubSub();
 
 // Create an Express application
 const app = express();
@@ -32,7 +26,6 @@ const io = new Server(server, {
   },
 });
 
-
 const loadEnv = async () => {
   try {
     await dotenv.config();
@@ -48,12 +41,6 @@ let connected = async () => {
     console.log("Connecting to the database...");
     await mongoose.connect(process.env.database_URI);
     console.log("Database connected successfully");
-    scheduleCronJobs();
-
-    // Apollo Server setup
-    const apolloServer = new ApolloServer({ typeDefs, resolvers });
-    await apolloServer.start();
-    apolloServer.applyMiddleware({ app });
 
     // Start listening to the Socket.io connections
     io.on("connection", (socket) => {
@@ -79,12 +66,10 @@ let connected = async () => {
       });
     });
 
-    // Start the Express server with Socket.io and Apollo Server
+    // Start the Express server with Socket.io
     const PORT = process.env.PORT || 4000;
     server.listen(PORT, () => {
-      console.log(
-        `Server running at http://localhost:${PORT}${apolloServer.graphqlPath}`
-      );
+      console.log(`Server running at http://localhost:${PORT}`);
     });
   } catch (error) {
     console.error("Error connecting to the database:", error);
@@ -93,33 +78,6 @@ let connected = async () => {
 
 const isConnected = () => {
   return mongoose.connection.readyState === 1;
-};
-
-const scheduleCronJobs = () => {
-  // Run every minute
-  cron.schedule("* * * * *", () => {
-    try {
-      console.log("Running a task every minute");
-    } catch (error) {
-      console.error("Error in every-minute cron job:", error);
-    }
-  });
-
-  cron.schedule("0 0 * * *", async () => {
-    try {
-      console.log("Running daily tasks at midnight");
-
-      // Task 2: Deleting old OTP records
-      console.log("Running cron job to delete old OTP records");
-      const result = await Details.updateMany(
-        { otpExpiration: { $lt: new Date() } }, // Find expired OTPs
-        { $unset: { otp: "", otpExpiration: "" } } // Remove fields
-      );
-      console.log(`Cleared OTPs from ${result.modifiedCount} user records`);
-    } catch (error) {
-      console.error("Error in daily midnight cron job:", error);
-    }
-  });
 };
 
 module.exports = {
